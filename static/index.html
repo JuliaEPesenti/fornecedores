@@ -84,6 +84,9 @@ tr:hover td { background: #fafaf8; }
 /* Badges */
 .cat-badge { display: inline-block; padding: 3px 9px; border-radius: 12px; font-size: 11px; font-weight: 500; background: #e6f1fb; color: #0c447c; }
 .subcat-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; background: #eaf3de; color: #27500a; margin-left: 4px; }
+.cnpj-ativa { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; background: #eaf3de; color: #27500a; font-weight: 500; }
+.cnpj-inativa { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; background: #fcebeb; color: #791f1f; font-weight: 500; }
+.cnpj-sem { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; background: #F1EFE8; color: #888; }
 
 /* Modais */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
@@ -162,7 +165,10 @@ tr:hover td { background: #fafaf8; }
 <!-- TELA DE LOGIN -->
 <div class="login-page" id="login-page">
   <div class="login-card">
-    <h2>📦 Fornecedores</h2>
+    <div style="margin-bottom:20px">
+      <img src="/static/logo.png" alt="Asaas" style="height:48px;border-radius:8px">
+    </div>
+    <h2 style="font-size:18px;color:#555;font-weight:500">Base de Fornecedores</h2>
     <p>Entre com sua conta para continuar</p>
     <div class="login-error" id="login-error"></div>
     <div class="form-group"><label>E-mail</label><input id="login-email" type="email" placeholder="seu@email.com" value="admin@sistema.com"></div>
@@ -174,7 +180,10 @@ tr:hover td { background: #fafaf8; }
 <!-- APP PRINCIPAL -->
 <div class="app" id="app">
   <aside class="sidebar">
-    <div class="logo">📦 <span>Fornecedores</span></div>
+    <div class="logo" style="padding:14px 20px">
+  <img src="/static/logo.png" alt="Asaas" style="height:32px;border-radius:6px;display:block">
+  <div style="font-size:11px;color:#555;margin-top:6px;letter-spacing:.05em;text-transform:uppercase">Fornecedores</div>
+</div>
     <div class="nav-items">
       <div class="nav-sep">Principal</div>
       <div class="nav-item active" data-sec="fornecedores" onclick="nav(this,'fornecedores')">🏢 Fornecedores</div>
@@ -211,10 +220,26 @@ tr:hover td { background: #fafaf8; }
         <input id="busca-input" type="text" placeholder="Buscar..." oninput="filtrarForn()">
         <select id="filtro-cat" onchange="filtrarForn(); carregarSubcatFiltro()"><option value="">Todas as categorias</option></select>
         <select id="filtro-subcat" onchange="filtrarForn()"><option value="">Todas as subcategorias</option></select>
+        <select id="filtro-cidade" onchange="filtrarForn()">
+          <option value="">Todas as cidades</option>
+          <option value="Joinville">Joinville</option>
+          <option value="São Paulo">São Paulo</option>
+        </select>
+        <select id="filtro-estado" onchange="filtrarForn()">
+          <option value="">Todos os estados</option>
+          <option value="SC">Santa Catarina (SC)</option>
+          <option value="SP">São Paulo (SP)</option>
+          <option value="RJ">Rio de Janeiro (RJ)</option>
+          <option value="MG">Minas Gerais (MG)</option>
+          <option value="PR">Paraná (PR)</option>
+          <option value="RS">Rio Grande do Sul (RS)</option>
+          <option value="GO">Goiás (GO)</option>
+          <option value="BA">Bahia (BA)</option>
+        </select>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Nome</th><th>Categoria</th><th>Subcategoria</th><th>Contato</th><th>Cidade</th><th>Ações</th></tr></thead>
+          <thead><tr><th>Nome</th><th>Categoria</th><th>Subcategoria</th><th>CNPJ</th><th>Situação</th><th>Contato</th><th>Cidade/Estado</th><th>Ações</th></tr></thead>
           <tbody id="tbody-forn"></tbody>
         </table>
       </div>
@@ -316,6 +341,9 @@ tr:hover td { background: #fafaf8; }
       <div class="form-group"><label>E-mail</label><input id="f-email" placeholder="contato@empresa.com"></div>
       <div class="form-group"><label>Cidade</label><input id="f-cidade" placeholder="Ex: São Paulo"></div>
       <div class="form-group full"><label>Site</label><input id="f-site" placeholder="https://..."></div>
+      <div class="form-group"><label>CNPJ</label><input id="f-cnpj" placeholder="00.000.000/0000-00"></div>
+      <div class="form-group"><label>Estado (sigla)</label><input id="f-estado" placeholder="Ex: SC, SP"></div>
+      <div class="form-group full"><label>Endereço</label><input id="f-endereco" placeholder="Rua, número"></div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="fechar('modal-forn')">Cancelar</button>
@@ -500,13 +528,24 @@ function carregarSubcatModal() {
 function renderForn(lista) {
   const tb = document.getElementById("tbody-forn");
   if (!lista.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="6">Nenhum fornecedor encontrado</td></tr>'; return; }
-  tb.innerHTML = lista.map(f => `
+  tb.innerHTML = lista.map(f => {
+    const sit = f.situacao_cnpj || '';
+    const sitClass = sit === 'ATIVA' ? 'cnpj-ativa' : sit ? 'cnpj-inativa' : 'cnpj-sem';
+    const sitLabel = sit || '–';
+    const cnpjLabel = f.cnpj || '–';
+    const cidadeEstado = [f.cidade, f.estado].filter(Boolean).join(' / ') || '–';
+    return `
     <tr>
-      <td><strong>${f.nome}</strong></td>
+      <td>
+        <strong>${f.nome}</strong>
+        ${f.endereco ? `<div style="font-size:11px;color:#aaa;margin-top:2px">${f.endereco}</div>` : ''}
+      </td>
       <td>${f.categoria_nome ? `<span class="cat-badge">${f.categoria_nome}</span>` : '<span style="color:#bbb">–</span>'}</td>
       <td>${f.subcategoria_nome ? `<span class="subcat-badge">${f.subcategoria_nome}</span>` : '<span style="color:#bbb">–</span>'}</td>
+      <td style="font-size:12px;color:#666">${cnpjLabel}</td>
+      <td><span class="${sitClass}">${sitLabel}</span></td>
       <td>${f.contato || '<span style="color:#bbb">–</span>'}</td>
-      <td>${f.cidade  || '<span style="color:#bbb">–</span>'}</td>
+      <td style="font-size:12px">${cidadeEstado}</td>
       <td>
         <div class="acoes">
           ${f.whatsapp ? `<button class="btn btn-whatsapp btn-xs" onclick="abrirWhatsApp('${f.whatsapp}','${f.nome}')">WhatsApp</button>` : ''}
@@ -515,17 +554,24 @@ function renderForn(lista) {
           <button class="btn btn-danger btn-xs" onclick="deletarForn(${f.id})">🗑</button>
         </div>
       </td>
-    </tr>`).join("");
+    </tr>`;
+  }).join("");
 }
 
 function filtrarForn() {
-  const busca  = document.getElementById("busca-input").value.toLowerCase();
-  const catId  = document.getElementById("filtro-cat").value;
+  const busca    = document.getElementById("busca-input").value.toLowerCase();
+  const catId    = document.getElementById("filtro-cat").value;
   const subcatId = document.getElementById("filtro-subcat").value;
-  const lista  = todosForns.filter(f =>
-    (!catId   || f.categoria_id == catId) &&
+  const cidade   = document.getElementById("filtro-cidade").value;
+  const estado   = document.getElementById("filtro-estado").value;
+  const lista    = todosForns.filter(f =>
+    (!catId    || f.categoria_id == catId) &&
     (!subcatId || f.subcategoria_id == subcatId) &&
-    (!busca || f.nome.toLowerCase().includes(busca) || (f.cidade||"").toLowerCase().includes(busca))
+    (!cidade   || (f.cidade||"") === cidade) &&
+    (!estado   || (f.estado||"") === estado) &&
+    (!busca    || f.nome.toLowerCase().includes(busca) ||
+                  (f.cidade||"").toLowerCase().includes(busca) ||
+                  (f.cnpj||"").includes(busca))
   );
   renderForn(lista);
 }
@@ -539,7 +585,7 @@ async function deletarForn(id) {
 function abrirModalForn() {
   editandoId = null;
   document.getElementById("modal-forn-titulo").textContent = "Novo fornecedor";
-  ["nome","contato","whatsapp","email","cidade","site"].forEach(k => document.getElementById("f-"+k).value = "");
+  ["nome","contato","whatsapp","email","cidade","estado","endereco","cnpj","site"].forEach(k => document.getElementById("f-"+k).value = "");
   document.getElementById("f-cat").value = ""; document.getElementById("f-subcat").innerHTML = '<option value="">Selecione...</option>';
   document.getElementById("modal-forn").classList.add("open");
 }
@@ -551,7 +597,10 @@ function editarForn(f) {
   document.getElementById("f-contato").value  = f.contato || "";
   document.getElementById("f-whatsapp").value = f.whatsapp|| "";
   document.getElementById("f-email").value    = f.email   || "";
-  document.getElementById("f-cidade").value   = f.cidade  || "";
+  document.getElementById("f-cidade").value   = f.cidade   || "";
+  document.getElementById("f-estado").value  = f.estado   || "";
+  document.getElementById("f-endereco").value= f.endereco || "";
+  document.getElementById("f-cnpj").value    = f.cnpj     || "";
   document.getElementById("f-site").value     = f.site    || "";
   document.getElementById("f-cat").value      = f.categoria_id || "";
   carregarSubcatModal();
@@ -568,6 +617,9 @@ async function salvarForn() {
     whatsapp: document.getElementById("f-whatsapp").value.trim(),
     email: document.getElementById("f-email").value.trim(),
     cidade: document.getElementById("f-cidade").value.trim(),
+    estado: document.getElementById("f-estado").value.trim().toUpperCase(),
+    endereco: document.getElementById("f-endereco").value.trim(),
+    cnpj: document.getElementById("f-cnpj").value.trim(),
     site: document.getElementById("f-site").value.trim(),
   };
   if (!dados.nome) { alert("Nome obrigatório!"); return; }
@@ -628,7 +680,9 @@ async function carregarFila() {
         <strong>${f.nome}</strong>
         <div class="meta">
           ${f.categoria ? `<span class="cat-badge">${f.categoria}</span>` : ""}
-          ${f.cidade    ? ` · ${f.cidade}` : ""}
+          ${f.cidade    ? ` · ${f.cidade}` : ""}${f.estado ? ` (${f.estado})` : ""}
+          ${f.cnpj      ? ` · CNPJ: ${f.cnpj}` : ""}
+          ${f.situacao_cnpj ? ` · <span style="color:${f.situacao_cnpj==='ATIVA'?'#27a96a':'#e24b4a'};font-weight:500">${f.situacao_cnpj}</span>` : ""}
           ${f.contato   ? ` · ${f.contato}` : ""}
           ${f.site      ? ` · <a href="${f.site}" target="_blank" style="color:#4f8ef7">${f.site}</a>` : ""}
         </div>
