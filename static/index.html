@@ -23,19 +23,19 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 /* Layout */
 .app { display: none; }
 .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 224px; background: #020c44; padding: 0; display: flex; flex-direction: column; }
-.logo { padding: 22px 20px 18px; font-size: 15px; font-weight: 600; color: #fff; border-bottom: 1px solid #2a2a2a; }
+.logo { padding: 22px 20px 18px; font-size: 15px; font-weight: 600; color: #fff; border-bottom: 1px solid #0d1f6e; }
 .logo span { color: #4f8ef7; }
 .nav-items { flex: 1; padding: 8px 0; overflow-y: auto; }
 .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: #999; cursor: pointer; transition: all .15s; font-size: 13px; }
-.nav-item:hover { background: #2a2a2a; color: #fff; }
-.nav-item.active { background: #2a2a2a; color: #fff; border-left: 3px solid #4f8ef7; padding-left: 17px; }
+.nav-item:hover { background: #0d1f6e; color: #fff; }
+.nav-item.active { background: #0d1f6e; color: #fff; border-left: 3px solid #4f8ef7; padding-left: 17px; }
 .nav-item .badge { margin-left: auto; background: #e24b4a; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 600; }
 .nav-sep { padding: 6px 20px 2px; font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: .08em; margin-top: 6px; }
-.sidebar-footer { padding: 14px 20px; border-top: 1px solid #2a2a2a; }
+.sidebar-footer { padding: 14px 20px; border-top: 1px solid #0d1f6e; }
 .user-info { font-size: 12px; color: #888; margin-bottom: 8px; }
 .user-info strong { color: #ccc; display: block; font-size: 13px; }
 .btn-logout { width: 100%; padding: 7px; background: transparent; border: 1px solid #333; color: #888; border-radius: 6px; cursor: pointer; font-size: 12px; }
-.btn-logout:hover { background: #2a2a2a; color: #fff; }
+.btn-logout:hover { background: #0d1f6e; color: #fff; }
 .main { margin-left: 224px; padding: 28px; min-height: 100vh; }
 
 /* Stats */
@@ -165,7 +165,7 @@ tr:hover td { background: #fafaf8; }
 <!-- TELA DE LOGIN -->
 <div class="login-page" id="login-page">
   <div class="login-card">
-    <div style="background:#3b3bd4;margin:-40px -36px 24px;padding:28px;text-align:center;border-radius:14px 14px 0 0">
+    <div style="background:#020c44;margin:-40px -36px 24px;padding:28px;text-align:center;border-radius:14px 14px 0 0">
       <img src="/static/logo.png" alt="Asaas" style="height:60px;object-fit:contain;border-radius:8px">
     </div>
     <h2 style="font-size:18px;color:#555;font-weight:500"></h2>
@@ -180,7 +180,7 @@ tr:hover td { background: #fafaf8; }
 <!-- APP PRINCIPAL -->
 <div class="app" id="app">
   <aside class="sidebar">
-    <div style="background:#3b3fe8;padding:18px 20px 12px;border-bottom:1px solid #2a2e8a;text-align:center">
+    <div style="background:#020c44;padding:18px 20px 12px;border-bottom:1px solid #2a2e8a;text-align:center">
   <img src="/static/logo.png" alt="Asaas" style="width:100%;max-width:160px;display:inline-block;object-fit:contain">
   <div style="margin-top:6px;font-size:10px;color:#c0c8ff;text-transform:uppercase;letter-spacing:.1em"></div>
 </div>
@@ -887,4 +887,7 @@ function toast(msg, tipo="") {
 </script>
 </body>
 </html>
+
+
+
 
