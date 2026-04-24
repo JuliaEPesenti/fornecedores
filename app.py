@@ -532,60 +532,11 @@ def busca_automatica():
 def index():
     return send_from_directory("static", "index.html")
 
-def popular_banco_inicial():
-    with conectar() as conn:
-        total = conn.execute("SELECT COUNT(*) FROM fornecedores").fetchone()[0]
-        if total > 0:
-            return
-    import hashlib as hl
-    categorias = {
-        "Metalurgia":       ["Aço", "Alumínio", "Ferro", "Cobre"],
-        "Tecnologia":       ["Hardware", "Software", "Redes", "Suporte TI"],
-        "Logística":        ["Transporte", "Armazenagem", "Courier"],
-        "Química":          ["Solventes", "Tintas", "Lubrificantes"],
-        "Agropecuária":     ["Sementes", "Fertilizantes", "Máquinas Agrícolas"],
-        "Elétrica":         ["Cabos", "Painéis", "Iluminação"],
-        "Madeira e Móveis": ["Madeira Bruta", "MDF", "Móveis Planejados"],
-    }
-    cat_ids = {}
-    with conectar() as conn:
-        for cat_nome in categorias:
-            conn.execute("INSERT OR IGNORE INTO categorias (nome) VALUES (?)", (cat_nome,))
-            conn.commit()
-            row = conn.execute("SELECT id FROM categorias WHERE nome=?", (cat_nome,)).fetchone()
-            cat_ids[cat_nome] = row[0]
-            for sub in categorias[cat_nome]:
-                conn.execute("INSERT OR IGNORE INTO subcategorias (nome,categoria_id) VALUES (?,?)", (sub, row[0]))
-        conn.commit()
-        fornecedores = [
-            ("AçoMax Ltda",    "Metalurgia",  "Aço",        "(11) 99000-1111", "acomax@email.com",   "São Paulo",      "", "11990001111"),
-            ("QuimiPro",       "Química",     "Tintas",      "(21) 98000-2222", "quimipro@email.com", "Rio de Janeiro", "", ""),
-            ("MadeiraBella",   "Madeira e Móveis","MDF",     "(41) 97000-3333", "madeira@email.com",  "Curitiba",       "", "41970003333"),
-            ("TechSupply",     "Tecnologia",  "Hardware",    "(11) 96000-4444", "tech@email.com",     "São Paulo",      "https://techsupply.com.br", ""),
-            ("AgroFértil",     "Agropecuária","Fertilizantes","(62) 95000-5555","agro@email.com",     "Goiânia",        "", ""),
-            ("EletroWatt",     "Elétrica",    "Cabos",       "(31) 93000-7777", "eletro@email.com",   "Belo Horizonte", "", "31930007777"),
-            ("LogiTrans",      "Logística",   "Transporte",  "(11) 92000-8888", "logi@email.com",     "Guarulhos",      "", "11920008888"),
-            ("MetalForm",      "Metalurgia",  "Ferro",       "(11) 90000-0000", "metal@email.com",    "Santo André",    "", ""),
-            ("DataSoft",       "Tecnologia",  "Software",    "(41) 89000-1212", "data@email.com",     "Curitiba",       "https://datasoft.com.br", ""),
-            ("QuimiBras",      "Química",     "Solventes",   "(13) 88000-1313", "quimibras@email.com","Santos",         "", ""),
-        ]
-        for f in fornecedores:
-            nome, cat_nome, sub_nome = f[0], f[1], f[2]
-            cat_id = cat_ids.get(cat_nome)
-            sub_row = conn.execute("SELECT id FROM subcategorias WHERE nome=? AND categoria_id=?", (sub_nome, cat_id)).fetchone()
-            sub_id  = sub_row[0] if sub_row else None
-            conn.execute("INSERT INTO fornecedores (nome,categoria_id,subcategoria_id,contato,email,cidade,site,whatsapp) VALUES (?,?,?,?,?,?,?,?)",
-                         (nome, cat_id, sub_id, f[3], f[4], f[5], f[6], f[7]))
-        conn.commit()
-    print("Banco populado com dados iniciais!")
-
-criar_banco()
-popular_banco_inicial()
-scheduler = BackgroundScheduler()
-scheduler.add_job(busca_automatica, "interval", minutes=30)
-scheduler.start()
-
 if __name__ == "__main__":
+    criar_banco()
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(busca_automatica, "interval", minutes=30)
+    scheduler.start()
     print("Acesse: http://localhost:5000")
     print("Login padrão: admin@sistema.com / admin123")
     try:
