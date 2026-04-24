@@ -1,4 +1,4 @@
-﻿from flask import Flask, request, jsonify, send_from_directory, session
+from flask import Flask, request, jsonify, send_from_directory, session
 import psycopg2, psycopg2.extras, requests, re, smtplib, hashlib, os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -510,7 +510,7 @@ def buscar_fornecedores_web(categoria, cidade=""):
         resp = requests.get(url, params=params, timeout=15)
         data = resp.json()
         resultados = []
-        ignorar = ["wikipedia","youtube","instagram","facebook","linkedin","olx","mercado","google","tiktok","cnpj.info","cnpj.biz","econodata","empresaqui","tudo-empresas","consultasocio","cnpja","casadosdados"]
+        ignorar = ["wikipedia","youtube","instagram","facebook","linkedin","olx","mercado","google","tiktok"]
         for item in data.get("organic_results", []):
             nome = re.sub(r"\s*[\|–-]\s*.{0,40}$", "", item.get("title","")).strip()
             site = item.get("link","")
@@ -524,16 +524,17 @@ def buscar_fornecedores_web(categoria, cidade=""):
             if m2: email = m2.group()
             cnpj = extrair_cnpj_do_texto(desc) or ""
             situacao_cnpj = ""
-            whatsapp = ""
+            # Se achou telefone, já coloca como whatsapp também (só números)
+            whatsapp = re.sub(r'\D', '', tel) if tel else ""
             # Enriquecer com dados da Receita Federal se tiver CNPJ
             if cnpj:
                 dados = consultar_cnpj(cnpj)
                 if dados:
-                    email     = dados.get("email") or email
-                    tel       = dados.get("contato") or tel
-                    whatsapp  = dados.get("whatsapp") or ""
+                    email         = dados.get("email") or email
+                    tel           = dados.get("contato") or tel
+                    whatsapp      = dados.get("whatsapp") or whatsapp
                     situacao_cnpj = dados.get("situacao_cnpj") or ""
-                    cidade    = dados.get("cidade") or cidade
+                    cidade        = dados.get("cidade") or cidade
             resultados.append({"nome": nome, "categoria": categoria, "contato": tel,
                                 "email": email, "cidade": cidade, "site": site,
                                 "cnpj": cnpj, "situacao_cnpj": situacao_cnpj, "whatsapp": whatsapp})
@@ -641,4 +642,3 @@ if __name__ == "__main__":
         app.run(debug=False, use_reloader=False, port=5000)
     except (KeyboardInterrupt, SystemExit):
         scheduler.shutdown()
-
