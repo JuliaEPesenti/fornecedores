@@ -187,15 +187,15 @@ tr:hover td { background: #fafaf8; }
     <div class="nav-items">
       <div class="nav-sep">Principal</div>
       <div class="nav-item active" data-sec="fornecedores" onclick="nav(this,'fornecedores')">🏢 Fornecedores</div>
-      <div class="nav-item" data-sec="fila" onclick="nav(this,'fila')" id="nav-fila">🔔 Aprovações</div>
-      <div class="nav-item" data-sec="historico" onclick="nav(this,'historico')">📋 Histórico</div>
+      <div class="nav-item" data-sec="fila" onclick="navAuto(this,'fila')" id="nav-fila">🔔 Aprovações</div>
+      <div class="nav-item" data-sec="historico" onclick="navAuto(this,'historico')">📋 Histórico</div>
       <div class="nav-sep">Busca</div>
-      <div class="nav-item" data-sec="busca" onclick="nav(this,'busca')">🔍 Buscar na Web</div>
+      <div class="nav-item" data-sec="busca" onclick="navAuto(this,'busca')">🔍 Buscar na Web</div>
       
       <div class="nav-sep">Cadastros</div>
-      <div class="nav-item" data-sec="categorias" onclick="nav(this,'categorias')">🗂️ Categorias</div>
-      <div class="nav-item admin-only" data-sec="usuarios" onclick="nav(this,'usuarios')" style="display:none">👥 Usuários</div>
-      <div class="nav-item admin-only" data-sec="configuracoes" onclick="nav(this,'configuracoes')" style="display:none">🔧 Configurações</div>
+      <div class="nav-item" data-sec="categorias" onclick="navAuto(this,'categorias')">🗂️ Categorias</div>
+      <div class="nav-item admin-only" data-sec="usuarios" onclick="navAuto(this,'usuarios')" style="display:none">👥 Usuários</div>
+      <div class="nav-item admin-only" data-sec="configuracoes" onclick="navAuto(this,'configuracoes')" style="display:none">🔧 Configurações</div>
     </div>
     <div class="sidebar-footer">
       <div class="user-info"><strong id="sidebar-nome">–</strong><span id="sidebar-perfil">–</span></div>
@@ -890,6 +890,7 @@ function toast(msg, tipo="") {
 </script>
 </body>
 </html>
+
 
 
 
