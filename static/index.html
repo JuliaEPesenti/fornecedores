@@ -683,7 +683,9 @@ async function carregarFila() {
           ${f.cidade    ? ` · ${f.cidade}` : ""}${f.estado ? ` (${f.estado})` : ""}
           ${f.cnpj      ? ` · CNPJ: ${f.cnpj}` : ""}
           ${f.situacao_cnpj ? ` · <span style="color:${f.situacao_cnpj==='ATIVA'?'#27a96a':'#e24b4a'};font-weight:500">${f.situacao_cnpj}</span>` : ""}
-          ${f.contato   ? ` · ${f.contato}` : ""}
+          ${f.contato ? ` · ${f.contato}` : ""}
+          ${f.email ? ` · <button class="btn btn-ghost btn-xs" onclick="abrirEmail('${f.email}','${f.nome}')">E-mail</button>` : ""}
+          ${f.whatsapp ? ` · <button class="btn btn-whatsapp btn-xs" onclick="abrirWhatsApp('${f.whatsapp}','${f.nome}')">WhatsApp</button>` : ""}
           ${f.site      ? ` · <a href="${f.site}" target="_blank" style="color:#4f8ef7">${f.site}</a>` : ""}
         </div>
       </div>
@@ -887,6 +889,7 @@ function toast(msg, tipo="") {
 </script>
 </body>
 </html>
+
 
 
 
