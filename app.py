@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory, session
+﻿from flask import Flask, request, jsonify, send_from_directory, session
 import psycopg2, psycopg2.extras, requests, re, smtplib, hashlib, os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -580,8 +580,9 @@ def buscar_cnpj(cnpj):
 @requer_login
 def buscar_manual():
     d = request.json
-    cat, cidade = d.get("categoria",""), d.get("cidade","")
+    cat, cidade, nome = d.get("categoria",""), d.get("cidade",""), d.get("nome","")
     if not cat: return jsonify({"erro": "Informe a categoria"}), 400
+    if nome: cat = f"{cat} {nome}".strip()
     resultados = buscar_fornecedores_web(cat, cidade)
     novos = salvar_na_fila(resultados, cat)
     return jsonify({"encontrados": len(resultados), "novos_na_fila": novos})
@@ -650,3 +651,4 @@ if __name__ == "__main__":
         app.run(debug=False, use_reloader=False, port=5000)
     except (KeyboardInterrupt, SystemExit):
         scheduler.shutdown()
+
