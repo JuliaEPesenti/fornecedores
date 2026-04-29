@@ -377,7 +377,7 @@ def aprovar_fila(id):
             cur2.execute("""INSERT INTO fornecedores 
                 (nome,contato,whatsapp,email,cidade,estado,site,cnpj,situacao_cnpj)
                 VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
-                (item["nome"],item["contato"],item.get("whatsapp",""),
+                (item["nome"],item["contato"],item.get("whatsapp","") or re.sub(r"\D","",item.get("contato","")),
                  item["email"],item["cidade"],item.get("estado",""),
                  item["site"],item.get("cnpj",""),item.get("situacao_cnpj","")))
             cur2.execute("UPDATE fila_aprovacao SET status='aprovado' WHERE id=%s", (id,))
@@ -405,7 +405,7 @@ def aprovar_todos():
             cur2.execute("""INSERT INTO fornecedores 
                 (nome,contato,whatsapp,email,cidade,estado,site,cnpj,situacao_cnpj)
                 VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
-                (item["nome"],item["contato"],item.get("whatsapp",""),
+                (item["nome"],item["contato"],item.get("whatsapp","") or re.sub(r"\D","",item.get("contato","")),
                  item["email"],item["cidade"],item.get("estado",""),
                  item["site"],item.get("cnpj",""),item.get("situacao_cnpj","")))
         cur2.execute("UPDATE fila_aprovacao SET status='aprovado' WHERE status='pendente'")
@@ -651,4 +651,5 @@ if __name__ == "__main__":
         app.run(debug=False, use_reloader=False, port=5000)
     except (KeyboardInterrupt, SystemExit):
         scheduler.shutdown()
+
 
