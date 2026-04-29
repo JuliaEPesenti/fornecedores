@@ -21,7 +21,7 @@ def conectar():
 
 def criar_banco():
     with conectar() as conn:
-        conn.execute("""
+        conn.cursor().execute("""
             CREATE TABLE IF NOT EXISTS usuarios (
                 id       INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome     TEXT NOT NULL,
@@ -31,13 +31,13 @@ def criar_banco():
                 ativo    INTEGER DEFAULT 1
             )
         """)
-        conn.execute("""
+        conn.cursor().execute("""
             CREATE TABLE IF NOT EXISTS categorias (
                 id   INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome TEXT NOT NULL UNIQUE
             )
         """)
-        conn.execute("""
+        conn.cursor().execute("""
             CREATE TABLE IF NOT EXISTS subcategorias (
                 id           INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome         TEXT NOT NULL,
@@ -45,7 +45,7 @@ def criar_banco():
                 FOREIGN KEY (categoria_id) REFERENCES categorias(id)
             )
         """)
-        conn.execute("""
+        conn.cursor().execute("""
             CREATE TABLE IF NOT EXISTS fornecedores (
                 id             INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome           TEXT NOT NULL,
@@ -62,7 +62,7 @@ def criar_banco():
                 FOREIGN KEY (subcategoria_id) REFERENCES subcategorias(id)
             )
         """)
-        conn.execute("""
+        conn.cursor().execute("""
             CREATE TABLE IF NOT EXISTS historico (
                 id         INTEGER PRIMARY KEY AUTOINCREMENT,
                 tabela     TEXT,
@@ -73,7 +73,7 @@ def criar_banco():
                 criado_em  TEXT DEFAULT (datetime('now','localtime'))
             )
         """)
-        conn.execute("""
+        conn.cursor().execute("""
             CREATE TABLE IF NOT EXISTS fila_aprovacao (
                 id        INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome      TEXT,
@@ -86,7 +86,7 @@ def criar_banco():
                 criado_em TEXT DEFAULT (datetime('now','localtime'))
             )
         """)
-        conn.execute("""
+        conn.cursor().execute("""
             CREATE TABLE IF NOT EXISTS config_busca (
                 id              INTEGER PRIMARY KEY AUTOINCREMENT,
                 categoria       TEXT NOT NULL,
@@ -95,7 +95,7 @@ def criar_banco():
                 ultima_busca    TEXT DEFAULT ''
             )
         """)
-        conn.execute("""
+        conn.cursor().execute("""
             CREATE TABLE IF NOT EXISTS config_email (
                 id       INTEGER PRIMARY KEY,
                 host     TEXT DEFAULT '',
@@ -107,14 +107,14 @@ def criar_banco():
         """)
         # Admin padrão
         senha_hash = hashlib.sha256("admin123".encode()).hexdigest()
-        conn.execute("INSERT OR IGNORE INTO usuarios (nome,email,senha,perfil) VALUES (?,?,?,?)",
+        conn.cursor().execute("INSERT OR IGNORE INTO usuarios (nome,email,senha,perfil) VALUES (?,?,?,?)",
                      ("Administrador","admin@sistema.com", senha_hash, "admin"))
         conn.commit()
     print("Banco pronto!")
 
 def registrar_historico(tabela, registro_id, acao, detalhe, usuario="sistema"):
     with conectar() as conn:
-        conn.execute("INSERT INTO historico (tabela,registro_id,acao,detalhe,usuario) VALUES (?,?,?,?,?)",
+        conn.cursor().execute("INSERT INTO historico (tabela,registro_id,acao,detalhe,usuario) VALUES (?,?,?,?,?)",
                      (tabela, registro_id, acao, detalhe, usuario))
         conn.commit()
 
@@ -143,7 +143,7 @@ def login():
     d = request.json
     senha_hash = hashlib.sha256(d.get("senha","").encode()).hexdigest()
     with conectar() as conn:
-        u = conn.execute("SELECT * FROM usuarios WHERE email=? AND senha=? AND ativo=1",
+        u = conn.cursor().execute("SELECT * FROM usuarios WHERE email=? AND senha=? AND ativo=1",
                          (d.get("email",""), senha_hash)).fetchone()
     if not u:
         return jsonify({"erro": "E-mail ou senha incorretos"}), 401
@@ -169,7 +169,7 @@ def me():
 @requer_admin
 def listar_usuarios():
     with conectar() as conn:
-        rows = conn.execute("SELECT id,nome,email,perfil,ativo FROM usuarios ORDER BY nome").fetchall()
+        rows = conn.cursor().execute("SELECT id,nome,email,perfil,ativo FROM usuarios ORDER BY nome").fetchall()
     return jsonify([dict(r) for r in rows])
 
 @app.route("/usuarios", methods=["POST"])
@@ -182,7 +182,7 @@ def criar_usuario():
     senha_hash = hashlib.sha256(d["senha"].encode()).hexdigest()
     try:
         with conectar() as conn:
-            cur = conn.execute("INSERT INTO usuarios (nome,email,senha,perfil) VALUES (?,?,?,?)",
+            cur = conn.cursor().execute("INSERT INTO usuarios (nome,email,senha,perfil) VALUES (?,?,?,?)",
                                (d["nome"], d["email"], senha_hash, d.get("perfil","usuario")))
             conn.commit()
         registrar_historico("usuarios", cur.lastrowid, "criou", f"Usuário {d['nome']}", usuario_logado())
@@ -195,7 +195,7 @@ def criar_usuario():
 @requer_admin
 def deletar_usuario(id):
     with conectar() as conn:
-        conn.execute("UPDATE usuarios SET ativo=0 WHERE id=?", (id,))
+        conn.cursor().execute("UPDATE usuarios SET ativo=0 WHERE id=?", (id,))
         conn.commit()
     registrar_historico("usuarios", id, "desativou", "Usuário desativado", usuario_logado())
     return jsonify({"mensagem": "Usuário desativado!"})
@@ -205,10 +205,10 @@ def deletar_usuario(id):
 @requer_login
 def listar_categorias():
     with conectar() as conn:
-        cats = conn.execute("SELECT * FROM categorias ORDER BY nome").fetchall()
+        cats = conn.cursor().execute("SELECT * FROM categorias ORDER BY nome").fetchall()
         result = []
         for c in cats:
-            subs = conn.execute("SELECT * FROM subcategorias WHERE categoria_id=? ORDER BY nome", (c["id"],)).fetchall()
+            subs = conn.cursor().execute("SELECT * FROM subcategorias WHERE categoria_id=? ORDER BY nome", (c["id"],)).fetchall()
             result.append({**dict(c), "subcategorias": [dict(s) for s in subs]})
     return jsonify(result)
 
@@ -219,7 +219,7 @@ def criar_categoria():
     if not d.get("nome"): return jsonify({"erro": "Nome obrigatório"}), 400
     try:
         with conectar() as conn:
-            cur = conn.execute("INSERT INTO categorias (nome) VALUES (?)", (d["nome"],))
+            cur = conn.cursor().execute("INSERT INTO categorias (nome) VALUES (?)", (d["nome"],))
             conn.commit()
         registrar_historico("categorias", cur.lastrowid, "criou", f"Categoria {d['nome']}", usuario_logado())
         return jsonify({"mensagem": "Categoria criada!", "id": cur.lastrowid}), 201
@@ -231,8 +231,8 @@ def criar_categoria():
 @requer_admin
 def deletar_categoria(id):
     with conectar() as conn:
-        conn.execute("DELETE FROM subcategorias WHERE categoria_id=?", (id,))
-        conn.execute("DELETE FROM categorias WHERE id=?", (id,))
+        conn.cursor().execute("DELETE FROM subcategorias WHERE categoria_id=?", (id,))
+        conn.cursor().execute("DELETE FROM categorias WHERE id=?", (id,))
         conn.commit()
     return jsonify({"mensagem": "Categoria removida!"})
 
@@ -242,7 +242,7 @@ def criar_subcategoria():
     d = request.json
     if not d.get("nome") or not d.get("categoria_id"): return jsonify({"erro": "Nome e categoria obrigatórios"}), 400
     with conectar() as conn:
-        cur = conn.execute("INSERT INTO subcategorias (nome,categoria_id) VALUES (?,?)", (d["nome"], d["categoria_id"]))
+        cur = conn.cursor().execute("INSERT INTO subcategorias (nome,categoria_id) VALUES (?,?)", (d["nome"], d["categoria_id"]))
         conn.commit()
     registrar_historico("subcategorias", cur.lastrowid, "criou", f"Subcategoria {d['nome']}", usuario_logado())
     return jsonify({"mensagem": "Subcategoria criada!", "id": cur.lastrowid}), 201
@@ -252,7 +252,7 @@ def criar_subcategoria():
 @requer_admin
 def deletar_subcategoria(id):
     with conectar() as conn:
-        conn.execute("DELETE FROM subcategorias WHERE id=?", (id,))
+        conn.cursor().execute("DELETE FROM subcategorias WHERE id=?", (id,))
         conn.commit()
     return jsonify({"mensagem": "Removida!"})
 
@@ -276,7 +276,7 @@ def listar():
     if busca:  sql += " AND (f.nome LIKE ? OR f.cidade LIKE ? OR c.nome LIKE ?)"; params += [f"%{busca}%"]*3
     sql += " ORDER BY f.nome"
     with conectar() as conn:
-        rows = conn.execute(sql, params).fetchall()
+        rows = conn.cursor().execute(sql, params).fetchall()
     return jsonify([dict(r) for r in rows])
 
 @app.route("/fornecedores", methods=["POST"])
@@ -285,7 +285,7 @@ def cadastrar():
     d = request.json
     if not d.get("nome"): return jsonify({"erro": "Nome obrigatório"}), 400
     with conectar() as conn:
-        cur = conn.execute("""INSERT INTO fornecedores (nome,categoria_id,subcategoria_id,contato,email,cidade,site,whatsapp)
+        cur = conn.cursor().execute("""INSERT INTO fornecedores (nome,categoria_id,subcategoria_id,contato,email,cidade,site,whatsapp)
                               VALUES (?,?,?,?,?,?,?,?)""",
                            (d["nome"], d.get("categoria_id"), d.get("subcategoria_id"),
                             d.get("contato",""), d.get("email",""), d.get("cidade",""),
@@ -299,7 +299,7 @@ def cadastrar():
 def editar(id):
     d = request.json
     with conectar() as conn:
-        conn.execute("""UPDATE fornecedores SET nome=?,categoria_id=?,subcategoria_id=?,
+        conn.cursor().execute("""UPDATE fornecedores SET nome=?,categoria_id=?,subcategoria_id=?,
                         contato=?,email=?,cidade=?,site=?,whatsapp=? WHERE id=?""",
                      (d.get("nome"), d.get("categoria_id"), d.get("subcategoria_id"),
                       d.get("contato",""), d.get("email",""), d.get("cidade",""),
@@ -312,8 +312,8 @@ def editar(id):
 @requer_login
 def deletar(id):
     with conectar() as conn:
-        f = conn.execute("SELECT nome FROM fornecedores WHERE id=?", (id,)).fetchone()
-        conn.execute("UPDATE fornecedores SET ativo=0 WHERE id=?", (id,))
+        f = conn.cursor().execute("SELECT nome FROM fornecedores WHERE id=?", (id,)).fetchone()
+        conn.cursor().execute("UPDATE fornecedores SET ativo=0 WHERE id=?", (id,))
         conn.commit()
     registrar_historico("fornecedores", id, "removeu", f"Fornecedor {f['nome'] if f else id}", usuario_logado())
     return jsonify({"mensagem": "Removido!"})
@@ -324,7 +324,7 @@ def deletar(id):
 @requer_admin
 def get_email_config():
     with conectar() as conn:
-        cfg = conn.execute("SELECT id,host,porta,usuario,remetente FROM config_email WHERE id=1").fetchone()
+        cfg = conn.cursor().execute("SELECT id,host,porta,usuario,remetente FROM config_email WHERE id=1").fetchone()
     return jsonify(dict(cfg) if cfg else {})
 
 @app.route("/email/config", methods=["POST"])
@@ -333,8 +333,8 @@ def get_email_config():
 def salvar_email_config():
     d = request.json
     with conectar() as conn:
-        conn.execute("DELETE FROM config_email")
-        conn.execute("INSERT INTO config_email (id,host,porta,usuario,senha,remetente) VALUES (1,?,?,?,?,?)",
+        conn.cursor().execute("DELETE FROM config_email")
+        conn.cursor().execute("INSERT INTO config_email (id,host,porta,usuario,senha,remetente) VALUES (1,?,?,?,?,?)",
                      (d.get("host",""), d.get("porta",587), d.get("usuario",""), d.get("senha",""), d.get("remetente","")))
         conn.commit()
     return jsonify({"mensagem": "Configuração de e-mail salva!"})
@@ -349,7 +349,7 @@ def enviar_email():
     if not destinatario or not assunto or not corpo:
         return jsonify({"erro": "Preencha todos os campos"}), 400
     with conectar() as conn:
-        cfg = conn.execute("SELECT * FROM config_email WHERE id=1").fetchone()
+        cfg = conn.cursor().execute("SELECT * FROM config_email WHERE id=1").fetchone()
     if not cfg or not cfg["host"]:
         return jsonify({"erro": "Configure o servidor de e-mail primeiro nas Configurações"}), 400
     try:
@@ -372,7 +372,7 @@ def enviar_email():
 @requer_login
 def listar_historico():
     with conectar() as conn:
-        rows = conn.execute("SELECT * FROM historico ORDER BY criado_em DESC LIMIT 100").fetchall()
+        rows = conn.cursor().execute("SELECT * FROM historico ORDER BY criado_em DESC LIMIT 100").fetchall()
     return jsonify([dict(r) for r in rows])
 
 # ─── Stats ────────────────────────────────────────────────────────────────────
@@ -380,9 +380,9 @@ def listar_historico():
 @requer_login
 def stats():
     with conectar() as conn:
-        total    = conn.execute("SELECT COUNT(*) FROM fornecedores WHERE ativo=1").fetchone()[0]
-        pendente = conn.execute("SELECT COUNT(*) FROM fila_aprovacao WHERE status='pendente'").fetchone()[0]
-        cats     = conn.execute("SELECT COUNT(*) FROM categorias").fetchone()[0]
+        total    = conn.cursor().execute("SELECT COUNT(*) FROM fornecedores WHERE ativo=1").fetchone()[0]
+        pendente = conn.cursor().execute("SELECT COUNT(*) FROM fila_aprovacao WHERE status='pendente'").fetchone()[0]
+        cats     = conn.cursor().execute("SELECT COUNT(*) FROM categorias").fetchone()[0]
     return jsonify({"total": total, "pendentes": pendente, "categorias": cats})
 
 # ─── Fila ─────────────────────────────────────────────────────────────────────
@@ -390,18 +390,18 @@ def stats():
 @requer_login
 def listar_fila():
     with conectar() as conn:
-        rows = conn.execute("SELECT * FROM fila_aprovacao WHERE status='pendente' ORDER BY criado_em DESC").fetchall()
+        rows = conn.cursor().execute("SELECT * FROM fila_aprovacao WHERE status='pendente' ORDER BY criado_em DESC").fetchall()
     return jsonify([dict(r) for r in rows])
 
 @app.route("/fila/<int:id>/aprovar", methods=["POST"])
 @requer_login
 def aprovar(id):
     with conectar() as conn:
-        item = conn.execute("SELECT * FROM fila_aprovacao WHERE id=?", (id,)).fetchone()
+        item = conn.cursor().execute("SELECT * FROM fila_aprovacao WHERE id=?", (id,)).fetchone()
         if not item: return jsonify({"erro": "Não encontrado"}), 404
-        conn.execute("INSERT INTO fornecedores (nome,contato,email,cidade,site) VALUES (?,?,?,?,?)",
+        conn.cursor().execute("INSERT INTO fornecedores (nome,contato,email,cidade,site) VALUES (?,?,?,?,?)",
                      (item["nome"],item["contato"],item["email"],item["cidade"],item["site"]))
-        conn.execute("UPDATE fila_aprovacao SET status='aprovado' WHERE id=?", (id,))
+        conn.cursor().execute("UPDATE fila_aprovacao SET status='aprovado' WHERE id=?", (id,))
         conn.commit()
     registrar_historico("fornecedores", id, "aprovou da fila", f"Fornecedor {item['nome']}", usuario_logado())
     return jsonify({"mensagem": "Aprovado!"})
@@ -410,7 +410,7 @@ def aprovar(id):
 @requer_login
 def rejeitar(id):
     with conectar() as conn:
-        conn.execute("UPDATE fila_aprovacao SET status='rejeitado' WHERE id=?", (id,))
+        conn.cursor().execute("UPDATE fila_aprovacao SET status='rejeitado' WHERE id=?", (id,))
         conn.commit()
     return jsonify({"mensagem": "Rejeitado!"})
 
@@ -418,11 +418,11 @@ def rejeitar(id):
 @requer_login
 def aprovar_todos():
     with conectar() as conn:
-        itens = conn.execute("SELECT * FROM fila_aprovacao WHERE status='pendente'").fetchall()
+        itens = conn.cursor().execute("SELECT * FROM fila_aprovacao WHERE status='pendente'").fetchall()
         for item in itens:
-            conn.execute("INSERT INTO fornecedores (nome,contato,email,cidade,site) VALUES (?,?,?,?,?)",
+            conn.cursor().execute("INSERT INTO fornecedores (nome,contato,email,cidade,site) VALUES (?,?,?,?,?)",
                          (item["nome"],item["contato"],item["email"],item["cidade"],item["site"]))
-        conn.execute("UPDATE fila_aprovacao SET status='aprovado' WHERE status='pendente'")
+        conn.cursor().execute("UPDATE fila_aprovacao SET status='aprovado' WHERE status='pendente'")
         conn.commit()
     return jsonify({"mensagem": f"{len(itens)} aprovados!"})
 
@@ -469,12 +469,12 @@ def buscar_fornecedores_web(categoria, cidade=""):
 
 def salvar_na_fila(resultados, categoria):
     with conectar() as conn:
-        ex = {r[0].lower() for r in conn.execute("SELECT nome FROM fila_aprovacao WHERE categoria=?", (categoria,))}
-        ex |= {r[0].lower() for r in conn.execute("SELECT nome FROM fornecedores WHERE ativo=1")}
+        ex = {r[0].lower() for r in conn.cursor().execute("SELECT nome FROM fila_aprovacao WHERE categoria=?", (categoria,))}
+        ex |= {r[0].lower() for r in conn.cursor().execute("SELECT nome FROM fornecedores WHERE ativo=1")}
         novos = 0
         for r in resultados:
             if r["nome"].lower() not in ex:
-                conn.execute("INSERT INTO fila_aprovacao (nome,categoria,contato,email,cidade,site) VALUES (?,?,?,?,?,?)",
+                conn.cursor().execute("INSERT INTO fila_aprovacao (nome,categoria,contato,email,cidade,site) VALUES (?,?,?,?,?,?)",
                              (r["nome"],r["categoria"],r["contato"],r["email"],r["cidade"],r["site"]))
                 ex.add(r["nome"].lower()); novos += 1
         conn.commit()
@@ -494,7 +494,7 @@ def buscar_manual():
 @requer_login
 def listar_configs():
     with conectar() as conn:
-        rows = conn.execute("SELECT * FROM config_busca ORDER BY id").fetchall()
+        rows = conn.cursor().execute("SELECT * FROM config_busca ORDER BY id").fetchall()
     return jsonify([dict(r) for r in rows])
 
 @app.route("/config-busca", methods=["POST"])
@@ -503,7 +503,7 @@ def criar_config():
     d = request.json
     if not d.get("categoria"): return jsonify({"erro": "Categoria obrigatória"}), 400
     with conectar() as conn:
-        cur = conn.execute("INSERT INTO config_busca (categoria,cidade,intervalo_horas) VALUES (?,?,?)",
+        cur = conn.cursor().execute("INSERT INTO config_busca (categoria,cidade,intervalo_horas) VALUES (?,?,?)",
                            (d["categoria"], d.get("cidade",""), d.get("intervalo_horas",24)))
         conn.commit()
     return jsonify({"mensagem": "Configuração salva!", "id": cur.lastrowid}), 201
@@ -512,13 +512,13 @@ def criar_config():
 @requer_login
 def deletar_config(id):
     with conectar() as conn:
-        conn.execute("DELETE FROM config_busca WHERE id=?", (id,))
+        conn.cursor().execute("DELETE FROM config_busca WHERE id=?", (id,))
         conn.commit()
     return jsonify({"mensagem": "Removido!"})
 
 def busca_automatica():
     with conectar() as conn:
-        configs = conn.execute("SELECT * FROM config_busca").fetchall()
+        configs = conn.cursor().execute("SELECT * FROM config_busca").fetchall()
     for cfg in configs:
         if cfg["ultima_busca"]:
             diff = (datetime.now() - datetime.fromisoformat(cfg["ultima_busca"])).total_seconds() / 3600
@@ -526,7 +526,7 @@ def busca_automatica():
         resultados = buscar_fornecedores_web(cfg["categoria"], cfg["cidade"])
         salvar_na_fila(resultados, cfg["categoria"])
         with conectar() as conn:
-            conn.execute("UPDATE config_busca SET ultima_busca=? WHERE id=?",
+            conn.cursor().execute("UPDATE config_busca SET ultima_busca=? WHERE id=?",
                          (datetime.now().isoformat(timespec="seconds"), cfg["id"]))
             conn.commit()
 
@@ -545,6 +545,7 @@ if __name__ == "__main__":
         app.run(debug=False, use_reloader=False, port=5000)
     except (KeyboardInterrupt, SystemExit):
         scheduler.shutdown()
+
 
 
 
