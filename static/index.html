@@ -1,17 +1,15 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+<meta charset="UTF-8">
+<link rel="icon" type="image/x-icon" href="/static/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title></title>
+<title>Base de Fornecedores</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f3; color: #1a1a1a; font-size: 14px; }
-
-/* Login */
 .login-page { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #f5f5f3; }
 .login-card { background: #fff; border-radius: 14px; border: 1px solid #e8e8e4; padding: 40px 36px; width: 380px; }
-.login-card h2 { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
 .login-card p { color: #888; font-size: 13px; margin-bottom: 28px; }
 .login-card .form-group { margin-bottom: 14px; }
 .login-card label { display: block; font-size: 12px; color: #666; font-weight: 500; margin-bottom: 5px; }
@@ -19,12 +17,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .login-card input:focus { border-color: #4f8ef7; }
 .login-card .btn-primary { width: 100%; padding: 10px; margin-top: 6px; }
 .login-error { background: #fcebeb; color: #791f1f; padding: 10px 14px; border-radius: 7px; font-size: 13px; margin-bottom: 14px; display: none; }
-
-/* Layout */
 .app { display: none; }
-.sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 224px; background: #020c44; padding: 0; display: flex; flex-direction: column; }
-.logo { padding: 22px 20px 18px; font-size: 15px; font-weight: 600; color: #fff; border-bottom: 1px solid #0d1f6e; }
-.logo span { color: #4f8ef7; }
+.sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 224px; background: #020c44; padding: 0; display: flex; flex-direction: column; z-index: 10; }
 .nav-items { flex: 1; padding: 8px 0; overflow-y: auto; }
 .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: #999; cursor: pointer; transition: all .15s; font-size: 13px; }
 .nav-item:hover { background: #0d1f6e; color: #fff; }
@@ -37,21 +31,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .btn-logout { width: 100%; padding: 7px; background: transparent; border: 1px solid #333; color: #888; border-radius: 6px; cursor: pointer; font-size: 12px; }
 .btn-logout:hover { background: #0d1f6e; color: #fff; }
 .main { margin-left: 224px; padding: 28px; min-height: 100vh; }
-
-/* Stats */
+.page { display: none; }
+.page.active { display: block; }
 .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 24px; }
 .stat-card { background: #fff; border-radius: 10px; padding: 18px 20px; border: 1px solid #e8e8e4; }
 .stat-card .label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
 .stat-card .value { font-size: 28px; font-weight: 600; }
 .stat-card .value.alert { color: #e24b4a; }
-
-/* Seções */
-.section { display: none; }
-.section.active { display: block; }
-.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
-.section-title { font-size: 18px; font-weight: 600; }
-
-/* Botões */
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+.page-title { font-size: 18px; font-weight: 600; }
 .btn { padding: 8px 16px; border-radius: 7px; border: none; cursor: pointer; font-size: 13px; font-weight: 500; transition: all .15s; }
 .btn-primary { background: #4f8ef7; color: #fff; }
 .btn-primary:hover { background: #3a7ef0; }
@@ -63,32 +51,24 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .btn-ghost:hover { background: #f0f0ee; }
 .btn-whatsapp { background: #25D366; color: #fff; }
 .btn-whatsapp:hover { background: #1ebe5c; }
+.btn-email { background: #4f8ef7; color: #fff; }
 .btn-sm { padding: 5px 10px; font-size: 12px; }
 .btn-xs { padding: 3px 8px; font-size: 11px; }
-
-/* Filtros */
 .filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
-.filters input, .filters select { padding: 8px 12px; border: 1px solid #e0e0da; border-radius: 7px; font-size: 13px; background: #fff; color: #1a1a1a; outline: none; }
-.filters input:focus, .filters select:focus { border-color: #4f8ef7; }
+.filters input, .filters select { padding: 8px 12px; border: 1px solid #e0e0da; border-radius: 7px; font-size: 13px; background: #fff; outline: none; }
 .filters input { flex: 1; min-width: 160px; }
-
-/* Tabela */
 .table-wrap { background: #fff; border-radius: 10px; border: 1px solid #e8e8e4; overflow: hidden; overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; min-width: 600px; }
-th { text-align: left; padding: 10px 14px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: #888; background: #fafaf8; border-bottom: 1px solid #e8e8e4; white-space: nowrap; }
+th { text-align: left; padding: 10px 14px; font-size: 11px; font-weight: 600; text-transform: uppercase; color: #888; background: #fafaf8; border-bottom: 1px solid #e8e8e4; white-space: nowrap; }
 td { padding: 10px 14px; border-bottom: 1px solid #f0f0ec; vertical-align: middle; }
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: #fafaf8; }
 .empty-row td { text-align: center; padding: 32px; color: #aaa; }
-
-/* Badges */
 .cat-badge { display: inline-block; padding: 3px 9px; border-radius: 12px; font-size: 11px; font-weight: 500; background: #e6f1fb; color: #0c447c; }
 .subcat-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; background: #eaf3de; color: #27500a; margin-left: 4px; }
 .cnpj-ativa { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; background: #eaf3de; color: #27500a; font-weight: 500; }
 .cnpj-inativa { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; background: #fcebeb; color: #791f1f; font-weight: 500; }
 .cnpj-sem { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; background: #F1EFE8; color: #888; }
-
-/* Modais */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.open { display: flex; }
 .modal { background: #fff; border-radius: 12px; padding: 28px; width: 500px; max-width: 100%; max-height: 90vh; overflow-y: auto; }
@@ -98,40 +78,29 @@ tr:hover td { background: #fafaf8; }
 .form-group.full { grid-column: 1/-1; }
 .form-group label { font-size: 12px; color: #666; font-weight: 500; }
 .form-group input, .form-group select, .form-group textarea { padding: 8px 11px; border: 1px solid #ddd; border-radius: 7px; font-size: 13px; outline: none; font-family: inherit; }
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #4f8ef7; }
 .form-group textarea { resize: vertical; min-height: 80px; }
 .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-
-/* Fila */
 .fila-card { background: #fff; border-radius: 10px; border: 1px solid #e8e8e4; padding: 14px 18px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; }
 .fila-card .info { flex: 1; }
 .fila-card .info strong { font-size: 14px; display: block; margin-bottom: 3px; }
 .fila-card .info .meta { font-size: 12px; color: #888; }
 .fila-card .actions { display: flex; gap: 8px; flex-shrink: 0; }
-
-/* Histórico */
 .hist-item { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid #f0f0ec; }
-.hist-item:last-child { border-bottom: none; }
 .hist-dot { width: 8px; height: 8px; border-radius: 50%; background: #4f8ef7; margin-top: 4px; flex-shrink: 0; }
 .hist-item .info { flex: 1; }
 .hist-item .info .acao { font-size: 13px; font-weight: 500; }
 .hist-item .info .det { font-size: 12px; color: #888; margin-top: 2px; }
 .hist-item .time { font-size: 11px; color: #bbb; flex-shrink: 0; }
-
-/* Categorias */
 .cat-tree { display: flex; flex-direction: column; gap: 10px; }
 .cat-node { background: #fff; border-radius: 10px; border: 1px solid #e8e8e4; overflow: hidden; }
 .cat-header { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: #fafaf8; border-bottom: 1px solid #f0f0ec; }
 .cat-header strong { flex: 1; font-size: 14px; }
 .sub-list { padding: 10px 18px; display: flex; flex-wrap: wrap; gap: 8px; }
 .sub-item { display: flex; align-items: center; gap: 6px; background: #eaf3de; padding: 4px 10px; border-radius: 14px; font-size: 12px; color: #27500a; }
-.sub-item button { background: none; border: none; cursor: pointer; color: #888; font-size: 12px; padding: 0; line-height: 1; }
+.sub-item button { background: none; border: none; cursor: pointer; color: #888; font-size: 12px; padding: 0; }
 .sub-item button:hover { color: #e24b4a; }
 .add-sub { display: flex; gap: 8px; padding: 8px 18px 14px; }
 .add-sub input { flex: 1; padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; outline: none; }
-.add-sub input:focus { border-color: #4f8ef7; }
-
-/* Usuários */
 .user-card { background: #fff; border-radius: 10px; border: 1px solid #e8e8e4; padding: 14px 18px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; }
 .user-avatar { width: 38px; height: 38px; border-radius: 50%; background: #e6f1fb; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; color: #0c447c; flex-shrink: 0; }
 .user-card .info { flex: 1; }
@@ -140,35 +109,24 @@ tr:hover td { background: #fafaf8; }
 .perfil-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; }
 .perfil-admin { background: #EEEDFE; color: #3C3489; }
 .perfil-usuario { background: #F1EFE8; color: #444441; }
-
-/* Config email */
 .config-box { background: #fff; border-radius: 10px; border: 1px solid #e8e8e4; padding: 24px; margin-bottom: 16px; }
 .config-box h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; }
-
-/* Busca */
 .busca-box { background: #fff; border-radius: 10px; border: 1px solid #e8e8e4; padding: 24px; margin-bottom: 20px; }
 .busca-resultado { margin-top: 14px; padding: 12px 16px; border-radius: 7px; font-size: 13px; display: none; }
 .busca-resultado.success { background: #eaf3de; color: #27500a; }
-.busca-resultado.error   { background: #fcebeb; color: #791f1f; }
-
-/* Toast */
+.busca-resultado.error { background: #fcebeb; color: #791f1f; }
 .toast { position: fixed; bottom: 24px; right: 24px; background: #020c44; color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 13px; z-index: 999; opacity: 0; transform: translateY(10px); transition: all .25s; pointer-events: none; max-width: 300px; }
 .toast.show { opacity: 1; transform: translateY(0); }
-.toast.error { background: #c73b3a; }
-
-/* Ações da tabela */
 .acoes { display: flex; gap: 4px; flex-wrap: nowrap; }
 </style>
 </head>
 <body>
 
-<!-- TELA DE LOGIN -->
 <div class="login-page" id="login-page">
   <div class="login-card">
     <div style="background:#020c44;margin:-40px -36px 24px;padding:28px;text-align:center;border-radius:14px 14px 0 0">
       <img src="/static/logo.png" alt="Asaas" style="height:60px;object-fit:contain;border-radius:8px">
     </div>
-    <h2 style="font-size:18px;color:#555;font-weight:500"></h2>
     <p>Entre com sua conta para continuar</p>
     <div class="login-error" id="login-error"></div>
     <div class="form-group"><label>E-mail</label><input id="login-email" type="email" placeholder="seu@email.com" value="admin@sistema.com"></div>
@@ -177,173 +135,162 @@ tr:hover td { background: #fafaf8; }
   </div>
 </div>
 
-<!-- APP PRINCIPAL -->
 <div class="app" id="app">
   <aside class="sidebar">
     <div style="background:#020c44;padding:18px 20px 12px;border-bottom:1px solid #2a2e8a;text-align:center">
-  <img src="/static/logo.png" alt="Asaas" style="width:100%;max-width:160px;display:inline-block;object-fit:contain">
-  <div style="margin-top:6px;font-size:10px;color:#c0c8ff;text-transform:uppercase;letter-spacing:.1em"></div>
-</div>
+      <img src="/static/logo.png" alt="Asaas" style="width:100%;max-width:160px;display:inline-block;object-fit:contain">
+    </div>
     <div class="nav-items">
       <div class="nav-sep">Principal</div>
-      <div class="nav-item active" data-sec="fornecedores" onclick="nav(this,'fornecedores')">🏢 Fornecedores</div>
-      <div class="nav-item" data-sec="fila" onclick="nav(this,'fila')" id="nav-fila">🔔 Aprovações</div>
-      <div class="nav-item" data-sec="historico" onclick="nav(this,'historico')">📋 Histórico</div>
+      <div class="nav-item active" onclick="irPara('fornecedores',this)">&#127970; Fornecedores</div>
+      <div class="nav-item" id="nav-fila" onclick="irPara('fila',this)">&#128276; Aprovacoes</div>
+      <div class="nav-item" onclick="irPara('historico',this)">&#128203; Historico</div>
       <div class="nav-sep">Busca</div>
-      <div class="nav-item" data-sec="busca" onclick="nav(this,'busca')">🔍 Buscar na Web</div>
-      <div class="nav-item" data-sec="auto" onclick="nav(this,'auto')">⚙️ Busca Automática</div>
+      <div class="nav-item" onclick="irPara('busca',this)">&#128269; Buscar na Web</div>
+      <div class="nav-item" onclick="irPara('auto',this)">&#9881; Busca Automatica</div>
       <div class="nav-sep">Cadastros</div>
-      <div class="nav-item" data-sec="categorias" onclick="nav(this,'categorias')">🗂️ Categorias</div>
-      <div class="nav-item admin-only" data-sec="usuarios" onclick="nav(this,'usuarios')" style="display:none">👥 Usuários</div>
-      <div class="nav-item admin-only" data-sec="configuracoes" onclick="nav(this,'configuracoes')" style="display:none">🔧 Configurações</div>
+      <div class="nav-item" onclick="irPara('categorias',this)">&#128193; Categorias</div>
+      <div class="nav-item admin-only" onclick="irPara('usuarios',this)" style="display:none">&#128101; Usuarios</div>
+      <div class="nav-item admin-only" onclick="irPara('configuracoes',this)" style="display:none">&#128295; Configuracoes</div>
     </div>
     <div class="sidebar-footer">
-      <div class="user-info"><strong id="sidebar-nome">–</strong><span id="sidebar-perfil">–</span></div>
+      <div class="user-info"><strong id="sidebar-nome">-</strong><span id="sidebar-perfil">-</span></div>
       <button class="btn-logout" onclick="fazerLogout()">Sair</button>
     </div>
   </aside>
 
   <main class="main">
-    <div class="stats">
-      <div class="stat-card"><div class="label">Fornecedores</div><div class="value" id="stat-total">–</div></div>
-      <div class="stat-card"><div class="label">Categorias</div><div class="value" id="stat-cats">–</div></div>
-      <div class="stat-card"><div class="label">Aguardando aprovação</div><div class="value alert" id="stat-pendentes">–</div></div>
-    </div>
 
-    <!-- Fornecedores -->
-    <div class="section active" id="sec-fornecedores">
-      <div class="section-header">
-        <div class="section-title">Fornecedores</div>
+    <div class="page active" id="page-fornecedores">
+      <div class="stats">
+        <div class="stat-card"><div class="label">Fornecedores</div><div class="value" id="stat-total">-</div></div>
+        <div class="stat-card"><div class="label">Categorias</div><div class="value" id="stat-cats">-</div></div>
+        <div class="stat-card"><div class="label">Aguardando aprovacao</div><div class="value alert" id="stat-pendentes">-</div></div>
+      </div>
+      <div class="page-header">
+        <div class="page-title">Fornecedores</div>
         <button class="btn btn-primary" onclick="abrirModalForn()">+ Novo fornecedor</button>
       </div>
       <div class="filters">
         <input id="busca-input" type="text" placeholder="Buscar..." oninput="filtrarForn()">
-        <select id="filtro-cat" onchange="filtrarForn(); carregarSubcatFiltro()"><option value="">Todas as categorias</option></select>
+        <select id="filtro-cat" onchange="filtrarForn();carregarSubcatFiltro()"><option value="">Todas as categorias</option></select>
         <select id="filtro-subcat" onchange="filtrarForn()"><option value="">Todas as subcategorias</option></select>
         <select id="filtro-cidade" onchange="filtrarForn()">
           <option value="">Todas as cidades</option>
           <option value="Joinville">Joinville</option>
-          <option value="São Paulo">São Paulo</option>
+          <option value="Sao Paulo">Sao Paulo</option>
+          <option value="Rio de Janeiro">Rio de Janeiro</option>
+          <option value="Curitiba">Curitiba</option>
+          <option value="Brasilia">Brasilia</option>
+          <option value="Belo Horizonte">Belo Horizonte</option>
+          <option value="Florianopolis">Florianopolis</option>
+          <option value="Blumenau">Blumenau</option>
         </select>
         <select id="filtro-estado" onchange="filtrarForn()">
           <option value="">Todos os estados</option>
           <option value="SC">Santa Catarina (SC)</option>
-          <option value="SP">São Paulo (SP)</option>
+          <option value="SP">Sao Paulo (SP)</option>
           <option value="RJ">Rio de Janeiro (RJ)</option>
           <option value="MG">Minas Gerais (MG)</option>
-          <option value="PR">Paraná (PR)</option>
+          <option value="PR">Parana (PR)</option>
           <option value="RS">Rio Grande do Sul (RS)</option>
-          <option value="GO">Goiás (GO)</option>
+          <option value="GO">Goias (GO)</option>
           <option value="BA">Bahia (BA)</option>
+          <option value="DF">Distrito Federal (DF)</option>
         </select>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Nome</th><th>Categoria</th><th>Subcategoria</th><th>CNPJ</th><th>Situação</th><th>Contato</th><th>Cidade/Estado</th><th>Ações</th></tr></thead>
+          <thead><tr><th>Nome</th><th>Categoria</th><th>Subcategoria</th><th>CNPJ</th><th>Situacao</th><th>Contato</th><th>Cidade/Estado</th><th>Acoes</th></tr></thead>
           <tbody id="tbody-forn"></tbody>
         </table>
       </div>
     </div>
 
-    <!-- Fila -->
-    <div class="section" id="sec-fila">
-      <div class="section-header">
-        <div class="section-title">Aguardando aprovação</div>
-        <button class="btn btn-success" onclick="aprovarTodos()">✅ Aprovar todos</button>
+    <div class="page" id="page-fila">
+      <div class="page-header">
+        <div class="page-title">Aguardando aprovacao</div>
+        <button class="btn btn-success" onclick="aprovarTodos()">Aprovar todos</button>
       </div>
       <div id="lista-fila"></div>
     </div>
 
-    <!-- Histórico -->
-    <div class="section" id="sec-historico">
-      <div class="section-title" style="margin-bottom:18px">Histórico de alterações</div>
-      <div class="table-wrap" style="padding:0 20px">
-        <div id="lista-historico"></div>
-      </div>
+    <div class="page" id="page-historico">
+      <div class="page-title" style="margin-bottom:18px">Historico de alteracoes</div>
+      <div class="table-wrap" style="padding:0 20px"><div id="lista-historico"></div></div>
     </div>
 
-    <!-- Busca manual -->
-    <div class="section" id="sec-busca">
-      <div class="section-title" style="margin-bottom:18px">Buscar novos fornecedores na web</div>
+    <div class="page" id="page-busca">
+      <div class="page-title" style="margin-bottom:18px">Buscar novos fornecedores na web</div>
       <div class="busca-box">
         <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
-          <div class="form-group" style="flex:1;min-width:140px"><label>Categoria / Especificidade</label><input id="busca-cat" placeholder="Ex: Queijo, Computador..."><div class="form-group" style="flex:1;min-width:140px"><label>Nome (opcional)</label><input id="busca-nome" placeholder="Ex: Sadia, BRF..."></div>
-          <div class="form-group" style="flex:1;min-width:140px"><label>Cidade (opcional)</label><input id="busca-cidade" placeholder="Ex: São Paulo"></div>
-          <button class="btn btn-primary" id="btn-buscar" onclick="executarBusca()">🔍 Buscar</button>
+          <div class="form-group" style="flex:1;min-width:140px"><label>Categoria / Especificidade</label><input id="busca-cat" placeholder="Ex: Queijo, Computador..."></div>
+          <div class="form-group" style="flex:1;min-width:140px"><label>Nome (opcional)</label><input id="busca-nome" placeholder="Ex: Sadia, BRF..."></div>
+          <div class="form-group" style="flex:1;min-width:140px"><label>Cidade (opcional)</label><input id="busca-cidade" placeholder="Ex: Sao Paulo"></div>
+          <button class="btn btn-primary" id="btn-buscar" onclick="executarBusca()">Buscar</button>
         </div>
         <div class="busca-resultado" id="busca-resultado"></div>
       </div>
-      <p style="font-size:13px;color:#888">Os resultados vão para a fila de aprovação. Você revisa antes de salvar.</p>
+      <p style="font-size:13px;color:#888">Os resultados vao para a fila de aprovacao. Voce revisa antes de salvar.</p>
     </div>
 
-    <!-- Busca automática -->
-    <div class="section" id="sec-auto">
-      <div class="section-header">
-        <div class="section-title">Busca automática</div>
+    <div class="page" id="page-auto">
+      <div class="page-header">
+        <div class="page-title">Busca automatica</div>
         <button class="btn btn-primary" onclick="abrirModalConfig()">+ Adicionar regra</button>
       </div>
       <div id="lista-config"></div>
     </div>
 
-    <!-- Categorias -->
-    <div class="section" id="sec-categorias">
-      <div class="section-header">
-        <div class="section-title">Categorias e subcategorias</div>
+    <div class="page" id="page-categorias">
+      <div class="page-header">
+        <div class="page-title">Categorias e subcategorias</div>
         <button class="btn btn-primary" onclick="abrirModalCat()">+ Nova categoria</button>
       </div>
       <div class="cat-tree" id="cat-tree"></div>
     </div>
 
-    <!-- Usuários (admin) -->
-    <div class="section" id="sec-usuarios">
-      <div class="section-header">
-        <div class="section-title">Usuários do sistema</div>
-        <button class="btn btn-primary" onclick="abrirModalUser()">+ Novo usuário</button>
+    <div class="page" id="page-usuarios">
+      <div class="page-header">
+        <div class="page-title">Usuarios do sistema</div>
+        <button class="btn btn-primary" onclick="abrirModalUser()">+ Novo usuario</button>
       </div>
       <div id="lista-usuarios"></div>
     </div>
 
-    <!-- Configurações (admin) -->
-    <div class="section" id="sec-configuracoes">
-      <div class="section-title" style="margin-bottom:18px">Configurações de e-mail</div>
+    <div class="page" id="page-configuracoes">
+      <div class="page-title" style="margin-bottom:18px">Configuracoes de e-mail</div>
       <div class="config-box">
-        <h3>Servidor SMTP (e-mail corporativo)</h3>
+        <h3>Servidor SMTP</h3>
         <div class="form-grid">
           <div class="form-group"><label>Servidor SMTP</label><input id="cfg-host" placeholder="mail.suaempresa.com.br"></div>
           <div class="form-group"><label>Porta</label><input id="cfg-porta" type="number" value="587"></div>
-          <div class="form-group"><label>Usuário (e-mail)</label><input id="cfg-usuario" placeholder="seu@empresa.com.br"></div>
-          <div class="form-group"><label>Senha</label><input id="cfg-senha" type="password" placeholder="••••••••"></div>
+          <div class="form-group"><label>Usuario</label><input id="cfg-usuario" placeholder="seu@empresa.com.br"></div>
+          <div class="form-group"><label>Senha</label><input id="cfg-senha" type="password"></div>
           <div class="form-group full"><label>E-mail remetente</label><input id="cfg-remetente" placeholder="seu@empresa.com.br"></div>
         </div>
-        <div style="margin-top:16px;display:flex;gap:10px">
-          <button class="btn btn-primary" onclick="salvarConfigEmail()">Salvar configuração</button>
-        </div>
-        <p style="font-size:12px;color:#aaa;margin-top:10px">Peça ao seu provedor de e-mail as configurações SMTP. Geralmente estão no painel do webmail.</p>
+        <div style="margin-top:16px"><button class="btn btn-primary" onclick="salvarConfigEmail()">Salvar</button></div>
       </div>
     </div>
+
   </main>
 </div>
 
-<!-- Modal: Fornecedor -->
 <div class="modal-overlay" id="modal-forn">
   <div class="modal">
     <h3 id="modal-forn-titulo">Novo fornecedor</h3>
     <div class="form-grid">
       <div class="form-group full"><label>Nome *</label><input id="f-nome" placeholder="Nome da empresa"></div>
-      <div class="form-group"><label>Categoria</label>
-        <select id="f-cat" onchange="carregarSubcatModal()"><option value="">Selecione...</option></select>
-      </div>
-      <div class="form-group"><label>Subcategoria</label>
-        <select id="f-subcat"><option value="">Selecione...</option></select>
-      </div>
+      <div class="form-group"><label>Categoria</label><select id="f-cat" onchange="carregarSubcatModal()"><option value="">Selecione...</option></select></div>
+      <div class="form-group"><label>Subcategoria</label><select id="f-subcat"><option value="">Selecione...</option></select></div>
       <div class="form-group"><label>Telefone</label><input id="f-contato" placeholder="(11) 9xxxx-xxxx"></div>
       <div class="form-group"><label>WhatsApp</label><input id="f-whatsapp" placeholder="(11) 9xxxx-xxxx"></div>
       <div class="form-group"><label>E-mail</label><input id="f-email" placeholder="contato@empresa.com"></div>
-      <div class="form-group"><label>Cidade</label><input id="f-cidade" placeholder="Ex: São Paulo"></div>
+      <div class="form-group"><label>Cidade</label><input id="f-cidade" placeholder="Ex: Sao Paulo"></div>
+      <div class="form-group"><label>Estado</label><input id="f-estado" placeholder="Ex: SC, SP"></div>
       <div class="form-group full"><label>Site</label><input id="f-site" placeholder="https://..."></div>
       <div class="form-group"><label>CNPJ</label><input id="f-cnpj" placeholder="00.000.000/0000-00"></div>
-      <div class="form-group"><label>Estado (sigla)</label><input id="f-estado" placeholder="Ex: SC, SP"></div>
-      <div class="form-group full"><label>Endereço</label><input id="f-endereco" placeholder="Rua, número"></div>
+      <div class="form-group full"><label>Endereco</label><input id="f-endereco" placeholder="Rua, numero"></div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="fechar('modal-forn')">Cancelar</button>
@@ -352,7 +299,6 @@ tr:hover td { background: #fafaf8; }
   </div>
 </div>
 
-<!-- Modal: Enviar e-mail -->
 <div class="modal-overlay" id="modal-email">
   <div class="modal">
     <h3>Enviar e-mail</h3>
@@ -362,16 +308,15 @@ tr:hover td { background: #fafaf8; }
     <div id="email-status" style="font-size:13px;margin-bottom:10px;display:none"></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="fechar('modal-email')">Cancelar</button>
-      <button class="btn btn-primary" id="btn-enviar-email" onclick="enviarEmail()">📧 Enviar</button>
+      <button class="btn btn-primary" id="btn-enviar-email" onclick="enviarEmail()">Enviar</button>
     </div>
   </div>
 </div>
 
-<!-- Modal: Nova categoria -->
 <div class="modal-overlay" id="modal-cat">
   <div class="modal" style="width:360px">
     <h3>Nova categoria</h3>
-    <div class="form-group" style="margin-bottom:16px"><label>Nome da categoria</label><input id="cat-nome" placeholder="Ex: Metalurgia"></div>
+    <div class="form-group" style="margin-bottom:16px"><label>Nome</label><input id="cat-nome" placeholder="Ex: Metalurgia"></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="fechar('modal-cat')">Cancelar</button>
       <button class="btn btn-primary" onclick="salvarCat()">Salvar</button>
@@ -379,26 +324,22 @@ tr:hover td { background: #fafaf8; }
   </div>
 </div>
 
-<!-- Modal: Novo usuário -->
 <div class="modal-overlay" id="modal-user">
   <div class="modal" style="width:380px">
-    <h3>Novo usuário</h3>
+    <h3>Novo usuario</h3>
     <div class="form-grid">
       <div class="form-group full"><label>Nome</label><input id="u-nome" placeholder="Nome completo"></div>
       <div class="form-group full"><label>E-mail</label><input id="u-email" type="email" placeholder="email@empresa.com"></div>
-      <div class="form-group"><label>Senha</label><input id="u-senha" type="password" placeholder="Senha"></div>
-      <div class="form-group"><label>Perfil</label>
-        <select id="u-perfil"><option value="usuario">Usuário</option><option value="admin">Administrador</option></select>
-      </div>
+      <div class="form-group"><label>Senha</label><input id="u-senha" type="password"></div>
+      <div class="form-group"><label>Perfil</label><select id="u-perfil"><option value="usuario">Usuario</option><option value="admin">Administrador</option></select></div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="fechar('modal-user')">Cancelar</button>
-      <button class="btn btn-primary" onclick="salvarUser()">Criar usuário</button>
+      <button class="btn btn-primary" onclick="salvarUser()">Criar</button>
     </div>
   </div>
 </div>
 
-<!-- Modal: Config busca automática -->
 <div class="modal-overlay" id="modal-config">
   <div class="modal" style="width:380px">
     <h3>Nova regra de busca</h3>
@@ -406,7 +347,13 @@ tr:hover td { background: #fafaf8; }
       <div class="form-group full"><label>Categoria / Especificidade</label><input id="cfg-cat" placeholder="Ex: Transportadora"></div>
       <div class="form-group"><label>Cidade (opcional)</label><input id="cfg-cidade2" placeholder="Ex: Curitiba"></div>
       <div class="form-group"><label>Buscar a cada</label>
-        <select id="cfg-intervalo"><option value="6">6 horas</option><option value="12">12 horas</option><option value="24" selected>24 horas</option><option value="48">48 horas</option><option value="168">1 semana</option></select>
+        <select id="cfg-intervalo">
+          <option value="6">6 horas</option>
+          <option value="12">12 horas</option>
+          <option value="24" selected>24 horas</option>
+          <option value="48">48 horas</option>
+          <option value="168">1 semana</option>
+        </select>
       </div>
     </div>
     <div class="modal-actions">
@@ -419,483 +366,339 @@ tr:hover td { background: #fafaf8; }
 <div class="toast" id="toast"></div>
 
 <script>
-let editandoId = null;
-let todosForns = [];
-let todasCats  = [];
-let perfilAtual = "";
+var editandoId=null,todosForns=[],todasCats=[],perfilAtual="";
 
-// ─── Auth ──────────────────────────────────────────────────────────────────────
-async function fazerLogin() {
-  const email = document.getElementById("login-email").value;
-  const senha = document.getElementById("login-senha").value;
-  const errEl = document.getElementById("login-error");
-  errEl.style.display = "none";
-  const r = await fetch("/auth/login", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({email, senha})});
-  const d = await r.json();
-  if (!r.ok) { errEl.textContent = d.erro; errEl.style.display = "block"; return; }
-  iniciarApp(d.nome, d.perfil);
+function irPara(pag,el){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
+  document.getElementById('page-'+pag).classList.add('active');
+  if(el)el.classList.add('active');
+  if(pag==='fila')carregarFila();
+  if(pag==='historico')carregarHistorico();
+  if(pag==='categorias')carregarCats();
+  if(pag==='usuarios')carregarUsuarios();
+  if(pag==='auto')carregarConfigs();
+  if(pag==='fornecedores'){carregarForn();carregarCatsFiltro();}
 }
 
-document.getElementById("login-senha").addEventListener("keydown", e => { if (e.key === "Enter") fazerLogin(); });
+async function fazerLogin(){
+  var email=document.getElementById('login-email').value;
+  var senha=document.getElementById('login-senha').value;
+  var errEl=document.getElementById('login-error');
+  errEl.style.display='none';
+  var r=await fetch('/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email,senha:senha})});
+  var d=await r.json();
+  if(!r.ok){errEl.textContent=d.erro;errEl.style.display='block';return;}
+  iniciarApp(d.nome,d.perfil);
+}
+document.getElementById('login-senha').addEventListener('keydown',function(e){if(e.key==='Enter')fazerLogin();});
 
-async function fazerLogout() {
-  await fetch("/auth/logout", {method:"POST"});
-  document.getElementById("app").style.display = "none";
-  document.getElementById("login-page").style.display = "flex";
+async function fazerLogout(){
+  await fetch('/auth/logout',{method:'POST'});
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-page').style.display='flex';
 }
 
-function iniciarApp(nome, perfil) {
-  perfilAtual = perfil;
-  document.getElementById("login-page").style.display = "none";
-  document.getElementById("app").style.display = "block";
-  document.getElementById("sidebar-nome").textContent  = nome;
-  document.getElementById("sidebar-perfil").textContent = perfil === "admin" ? "Administrador" : "Usuário";
-  if (perfil === "admin") {
-    document.querySelectorAll(".admin-only").forEach(el => el.style.display = "flex");
+function iniciarApp(nome,perfil){
+  perfilAtual=perfil;
+  document.getElementById('login-page').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('sidebar-nome').textContent=nome;
+  document.getElementById('sidebar-perfil').textContent=perfil==='admin'?'Administrador':'Usuario';
+  if(perfil==='admin'){
+    document.querySelectorAll('.admin-only').forEach(function(el){el.style.display='flex';});
     carregarConfigEmail();
   }
-  carregarForn(); carregarCatsFiltro(); carregarStats();
-  setInterval(carregarStats, 15000);
+  carregarForn();carregarCatsFiltro();carregarStats();
+  setInterval(carregarStats,15000);
 }
 
-async function verificarSessao() {
-  const r = await fetch("/auth/me").then(r=>r.json());
-  if (r.logado) iniciarApp(r.nome, r.perfil);
+async function verificarSessao(){
+  var r=await fetch('/auth/me').then(function(r){return r.json();});
+  if(r.logado)iniciarApp(r.nome,r.perfil);
 }
 verificarSessao();
 
-// ─── Nav ────────────────────────────────────────────────────────────────────────
-function nav(el, sec) {
-  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
-  document.getElementById("sec-"+sec).classList.add("active");
-  el.classList.add("active");
-  if (sec === "fila")          carregarFila();
-  if (sec === "historico")     carregarHistorico();
-  if (sec === "categorias")    carregarCats();
-  if (sec === "usuarios")      carregarUsuarios();
-  if (sec === "auto")          carregarConfigs();
-  if (sec === "fornecedores")  { carregarForn(); carregarCatsFiltro(); }
+async function carregarStats(){
+  var r=await fetch('/stats').then(function(r){return r.json();}).catch(function(){return null;});
+  if(!r)return;
+  document.getElementById('stat-total').textContent=r.total;
+  document.getElementById('stat-cats').textContent=r.categorias;
+  document.getElementById('stat-pendentes').textContent=r.pendentes;
+  var nav=document.getElementById('nav-fila');
+  if(r.pendentes>0){
+    var b=nav.querySelector('.badge');
+    if(!b)nav.innerHTML+='<span class="badge">'+r.pendentes+'</span>';
+    else b.textContent=r.pendentes;
+  }else{var b2=nav.querySelector('.badge');if(b2)b2.remove();}
 }
 
-// ─── Stats ──────────────────────────────────────────────────────────────────────
-async function carregarStats() {
-  const r = await fetch("/stats").then(r=>r.json()).catch(()=>null);
-  if (!r) return;
-  document.getElementById("stat-total").textContent    = r.total;
-  document.getElementById("stat-cats").textContent     = r.categorias;
-  document.getElementById("stat-pendentes").textContent = r.pendentes;
-  const nav = document.getElementById("nav-fila");
-  if (r.pendentes > 0) {
-    const b = nav.querySelector(".badge");
-    if (!b) nav.innerHTML += `<span class="badge">${r.pendentes}</span>`;
-    else b.textContent = r.pendentes;
-  } else { nav.querySelector(".badge")?.remove(); }
+async function carregarForn(){
+  var r=await fetch('/fornecedores').then(function(r){return r.json();});
+  todosForns=r;renderForn(r);
 }
 
-// ─── Fornecedores ───────────────────────────────────────────────────────────────
-async function carregarForn() {
-  const r = await fetch("/fornecedores").then(r=>r.json());
-  todosForns = r; renderForn(r);
+async function carregarCatsFiltro(){
+  todasCats=await fetch('/categorias').then(function(r){return r.json();});
+  var sel=document.getElementById('filtro-cat');
+  sel.innerHTML='<option value="">Todas as categorias</option>'+todasCats.map(function(c){return '<option value="'+c.id+'">'+c.nome+'</option>';}).join('');
+  var selM=document.getElementById('f-cat');
+  selM.innerHTML='<option value="">Selecione...</option>'+todasCats.map(function(c){return '<option value="'+c.id+'">'+c.nome+'</option>';}).join('');
 }
 
-async function carregarCatsFiltro() {
-  todasCats = await fetch("/categorias").then(r=>r.json());
-  const sel = document.getElementById("filtro-cat");
-  sel.innerHTML = '<option value="">Todas as categorias</option>' + todasCats.map(c=>`<option value="${c.id}">${c.nome}</option>`).join("");
-  const selM = document.getElementById("f-cat");
-  selM.innerHTML = '<option value="">Selecione...</option>' + todasCats.map(c=>`<option value="${c.id}">${c.nome}</option>`).join("");
+function carregarSubcatFiltro(){
+  var catId=document.getElementById('filtro-cat').value;
+  var sel=document.getElementById('filtro-subcat');
+  sel.innerHTML='<option value="">Todas as subcategorias</option>';
+  if(!catId)return;
+  var cat=todasCats.find(function(c){return c.id==catId;});
+  if(cat)sel.innerHTML+=cat.subcategorias.map(function(s){return '<option value="'+s.id+'">'+s.nome+'</option>';}).join('');
 }
 
-function carregarSubcatFiltro() {
-  const catId = document.getElementById("filtro-cat").value;
-  const sel   = document.getElementById("filtro-subcat");
-  sel.innerHTML = '<option value="">Todas as subcategorias</option>';
-  if (!catId) return;
-  const cat = todasCats.find(c => c.id == catId);
-  if (cat) sel.innerHTML += cat.subcategorias.map(s=>`<option value="${s.id}">${s.nome}</option>`).join("");
+function carregarSubcatModal(){
+  var catId=document.getElementById('f-cat').value;
+  var sel=document.getElementById('f-subcat');
+  sel.innerHTML='<option value="">Selecione...</option>';
+  if(!catId)return;
+  var cat=todasCats.find(function(c){return c.id==catId;});
+  if(cat)sel.innerHTML+=cat.subcategorias.map(function(s){return '<option value="'+s.id+'">'+s.nome+'</option>';}).join('');
 }
 
-function carregarSubcatModal() {
-  const catId = document.getElementById("f-cat").value;
-  const sel   = document.getElementById("f-subcat");
-  sel.innerHTML = '<option value="">Selecione...</option>';
-  if (!catId) return;
-  const cat = todasCats.find(c => c.id == catId);
-  if (cat) sel.innerHTML += cat.subcategorias.map(s=>`<option value="${s.id}">${s.nome}</option>`).join("");
+function renderForn(lista){
+  var tb=document.getElementById('tbody-forn');
+  if(!lista.length){tb.innerHTML='<tr class="empty-row"><td colspan="8">Nenhum fornecedor encontrado</td></tr>';return;}
+  tb.innerHTML=lista.map(function(f){
+    var sit=f.situacao_cnpj||'';
+    var sitClass=sit==='ATIVA'?'cnpj-ativa':sit?'cnpj-inativa':'cnpj-sem';
+    var sitLabel=sit||'-';
+    var cnpjLabel=f.cnpj||'-';
+    var cidadeEstado=[f.cidade,f.estado].filter(Boolean).join(' / ')||'-';
+    var contato=f.contato||'-';
+    return '<tr><td><strong>'+f.nome+'</strong>'+(f.endereco?'<div style="font-size:11px;color:#aaa;margin-top:2px">'+f.endereco+'</div>':'')+'</td>'
+      +'<td>'+(f.categoria_nome?'<span class="cat-badge">'+f.categoria_nome+'</span>':'<span style="color:#bbb">-</span>')+'</td>'
+      +'<td>'+(f.subcategoria_nome?'<span class="subcat-badge">'+f.subcategoria_nome+'</span>':'<span style="color:#bbb">-</span>')+'</td>'
+      +'<td style="font-size:12px;color:#666">'+cnpjLabel+'</td>'
+      +'<td><span class="'+sitClass+'">'+sitLabel+'</span></td>'
+      +'<td style="font-size:12px">'+contato+'</td>'
+      +'<td style="font-size:12px">'+cidadeEstado+'</td>'
+      +'<td><div class="acoes">'
+      +(f.whatsapp?'<button class="btn btn-whatsapp btn-xs" onclick="abrirWhatsApp(\''+f.whatsapp+'\',\''+f.nome+'\')">WhatsApp</button>':'')
+      +(f.email?'<button class="btn btn-email btn-xs" onclick="abrirEmail(\''+f.email+'\',\''+f.nome+'\')">E-mail</button>':'')
+      +'<button class="btn btn-ghost btn-xs" onclick="editarForn('+JSON.stringify(f).replace(/"/g,"'")+')" style="font-size:14px">&#9999;</button>'
+      +'<button class="btn btn-danger btn-xs" onclick="deletarForn('+f.id+')">&#128465;</button>'
+      +'</div></td></tr>';
+  }).join('');
 }
 
-function renderForn(lista) {
-  const tb = document.getElementById("tbody-forn");
-  if (!lista.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="6">Nenhum fornecedor encontrado</td></tr>'; return; }
-  tb.innerHTML = lista.map(f => {
-    const sit = f.situacao_cnpj || '';
-    const sitClass = sit === 'ATIVA' ? 'cnpj-ativa' : sit ? 'cnpj-inativa' : 'cnpj-sem';
-    const sitLabel = sit || '–';
-    const cnpjLabel = f.cnpj || '–';
-    const cidadeEstado = [f.cidade, f.estado].filter(Boolean).join(' / ') || '–';
-    return `
-    <tr>
-      <td>
-        <strong>${f.nome}</strong>
-        ${f.endereco ? `<div style="font-size:11px;color:#aaa;margin-top:2px">${f.endereco}</div>` : ''}
-      </td>
-      <td>${f.categoria_nome ? `<span class="cat-badge">${f.categoria_nome}</span>` : '<span style="color:#bbb">–</span>'}</td>
-      <td>${f.subcategoria_nome ? `<span class="subcat-badge">${f.subcategoria_nome}</span>` : '<span style="color:#bbb">–</span>'}</td>
-      <td style="font-size:12px;color:#666">${cnpjLabel}</td>
-      <td><span class="${sitClass}">${sitLabel}</span></td>
-      <td>${f.whatsapp ? `<button class="btn btn-whatsapp btn-xs" onclick="abrirWhatsApp('${f.whatsapp}','${f.nome}')">WhatsApp</button>` : (f.email ? `<button class="btn btn-ghost btn-xs" onclick="abrirEmail('${f.email}','${f.nome}')">E-mail</button>` : (f.contato || '<span style="color:#bbb">–</span>'))}</td>
-      <td style="font-size:12px">${cidadeEstado}</td>
-      <td>
-        <div class="acoes">
-          ${f.whatsapp ? `<button class="btn btn-whatsapp btn-xs" onclick="abrirWhatsApp('${f.whatsapp}','${f.nome}')">WhatsApp</button>` : ''}
-          ${f.email    ? `<button class="btn btn-ghost btn-xs" onclick="abrirEmail('${f.email}','${f.nome}')">E-mail</button>` : ''}
-          <button class="btn btn-ghost btn-xs" onclick='editarForn(${JSON.stringify(f)})'>✏️</button>
-          <button class="btn btn-danger btn-xs" onclick="deletarForn(${f.id})">🗑</button>
-        </div>
-      </td>
-    </tr>`;
-  }).join("");
-}
-
-function filtrarForn() {
-  const busca    = document.getElementById("busca-input").value.toLowerCase();
-  const catId    = document.getElementById("filtro-cat").value;
-  const subcatId = document.getElementById("filtro-subcat").value;
-  const cidade   = document.getElementById("filtro-cidade").value;
-  const estado   = document.getElementById("filtro-estado").value;
-  const lista    = todosForns.filter(f =>
-    (!catId    || f.categoria_id == catId) &&
-    (!subcatId || f.subcategoria_id == subcatId) &&
-    (!cidade   || (f.cidade||"") === cidade) &&
-    (!estado   || (f.estado||"") === estado) &&
-    (!busca    || f.nome.toLowerCase().includes(busca) ||
-                  (f.cidade||"").toLowerCase().includes(busca) ||
-                  (f.cnpj||"").includes(busca))
-  );
+function filtrarForn(){
+  var busca=document.getElementById('busca-input').value.toLowerCase();
+  var catId=document.getElementById('filtro-cat').value;
+  var subcatId=document.getElementById('filtro-subcat').value;
+  var cidade=document.getElementById('filtro-cidade').value;
+  var estado=document.getElementById('filtro-estado').value;
+  var lista=todosForns.filter(function(f){
+    return (!catId||f.categoria_id==catId)&&(!subcatId||f.subcategoria_id==subcatId)&&(!cidade||(f.cidade||'')==cidade)&&(!estado||(f.estado||'')==estado)&&(!busca||f.nome.toLowerCase().includes(busca)||(f.cidade||'').toLowerCase().includes(busca)||(f.cnpj||'').includes(busca));
+  });
   renderForn(lista);
 }
 
-async function deletarForn(id) {
-  if (!confirm("Remover este fornecedor?")) return;
-  await fetch(`/fornecedores/${id}`, {method:"DELETE"});
-  toast("Fornecedor removido!"); carregarForn(); carregarStats();
+async function deletarForn(id){
+  if(!confirm('Remover este fornecedor?'))return;
+  await fetch('/fornecedores/'+id,{method:'DELETE'});
+  toast('Fornecedor removido!');carregarForn();carregarStats();
 }
 
-function abrirModalForn() {
-  editandoId = null;
-  document.getElementById("modal-forn-titulo").textContent = "Novo fornecedor";
-  ["nome","contato","whatsapp","email","cidade","estado","endereco","cnpj","site"].forEach(k => document.getElementById("f-"+k).value = "");
-  document.getElementById("f-cat").value = ""; document.getElementById("f-subcat").innerHTML = '<option value="">Selecione...</option>';
-  document.getElementById("modal-forn").classList.add("open");
+function abrirModalForn(){
+  editandoId=null;
+  document.getElementById('modal-forn-titulo').textContent='Novo fornecedor';
+  ['nome','contato','whatsapp','email','cidade','estado','endereco','cnpj','site'].forEach(function(k){document.getElementById('f-'+k).value='';});
+  document.getElementById('f-cat').value='';
+  document.getElementById('f-subcat').innerHTML='<option value="">Selecione...</option>';
+  document.getElementById('modal-forn').classList.add('open');
 }
 
-function editarForn(f) {
-  editandoId = f.id;
-  document.getElementById("modal-forn-titulo").textContent = "Editar fornecedor";
-  document.getElementById("f-nome").value     = f.nome    || "";
-  document.getElementById("f-contato").value  = f.contato || "";
-  document.getElementById("f-whatsapp").value = f.whatsapp|| "";
-  document.getElementById("f-email").value    = f.email   || "";
-  document.getElementById("f-cidade").value   = f.cidade   || "";
-  document.getElementById("f-estado").value  = f.estado   || "";
-  document.getElementById("f-endereco").value= f.endereco || "";
-  document.getElementById("f-cnpj").value    = f.cnpj     || "";
-  document.getElementById("f-site").value     = f.site    || "";
-  document.getElementById("f-cat").value      = f.categoria_id || "";
+function editarForn(f){
+  editandoId=f.id;
+  document.getElementById('modal-forn-titulo').textContent='Editar fornecedor';
+  document.getElementById('f-nome').value=f.nome||'';
+  document.getElementById('f-contato').value=f.contato||'';
+  document.getElementById('f-whatsapp').value=f.whatsapp||'';
+  document.getElementById('f-email').value=f.email||'';
+  document.getElementById('f-cidade').value=f.cidade||'';
+  document.getElementById('f-estado').value=f.estado||'';
+  document.getElementById('f-endereco').value=f.endereco||'';
+  document.getElementById('f-cnpj').value=f.cnpj||'';
+  document.getElementById('f-site').value=f.site||'';
+  document.getElementById('f-cat').value=f.categoria_id||'';
   carregarSubcatModal();
-  setTimeout(() => { document.getElementById("f-subcat").value = f.subcategoria_id || ""; }, 50);
-  document.getElementById("modal-forn").classList.add("open");
+  setTimeout(function(){document.getElementById('f-subcat').value=f.subcategoria_id||'';},50);
+  document.getElementById('modal-forn').classList.add('open');
 }
 
-async function salvarForn() {
-  const dados = {
-    nome: document.getElementById("f-nome").value.trim(),
-    categoria_id: document.getElementById("f-cat").value || null,
-    subcategoria_id: document.getElementById("f-subcat").value || null,
-    contato: document.getElementById("f-contato").value.trim(),
-    whatsapp: document.getElementById("f-whatsapp").value.trim(),
-    email: document.getElementById("f-email").value.trim(),
-    cidade: document.getElementById("f-cidade").value.trim(),
-    estado: document.getElementById("f-estado").value.trim().toUpperCase(),
-    endereco: document.getElementById("f-endereco").value.trim(),
-    cnpj: document.getElementById("f-cnpj").value.trim(),
-    site: document.getElementById("f-site").value.trim(),
+async function salvarForn(){
+  var dados={
+    nome:document.getElementById('f-nome').value.trim(),
+    categoria_id:document.getElementById('f-cat').value||null,
+    subcategoria_id:document.getElementById('f-subcat').value||null,
+    contato:document.getElementById('f-contato').value.trim(),
+    whatsapp:document.getElementById('f-whatsapp').value.trim(),
+    email:document.getElementById('f-email').value.trim(),
+    cidade:document.getElementById('f-cidade').value.trim(),
+    estado:document.getElementById('f-estado').value.trim().toUpperCase(),
+    endereco:document.getElementById('f-endereco').value.trim(),
+    cnpj:document.getElementById('f-cnpj').value.trim(),
+    site:document.getElementById('f-site').value.trim()
   };
-  if (!dados.nome) { alert("Nome obrigatório!"); return; }
-  const url = editandoId ? `/fornecedores/${editandoId}` : "/fornecedores";
-  const method = editandoId ? "PUT" : "POST";
-  await fetch(url, {method, headers:{"Content-Type":"application/json"}, body: JSON.stringify(dados)});
-  fechar("modal-forn");
-  toast(editandoId ? "Fornecedor atualizado!" : "Fornecedor cadastrado!");
-  carregarForn(); carregarStats();
+  if(!dados.nome){alert('Nome obrigatorio!');return;}
+  var url=editandoId?'/fornecedores/'+editandoId:'/fornecedores';
+  var method=editandoId?'PUT':'POST';
+  await fetch(url,{method:method,headers:{'Content-Type':'application/json'},body:JSON.stringify(dados)});
+  fechar('modal-forn');toast(editandoId?'Fornecedor atualizado!':'Fornecedor cadastrado!');
+  carregarForn();carregarStats();
 }
 
-// ─── WhatsApp ──────────────────────────────────────────────────────────────────
-function abrirWhatsApp(numero, nome) {
-  const num = numero.replace(/\D/g,"");
-  const msg = encodeURIComponent(`Olá ${nome}, tudo bem?`);
-  window.open(`https://wa.me/55${num}?text=${msg}`, "_blank");
+function abrirWhatsApp(numero,nome){
+  var num=numero.replace(/\D/g,'');
+  var msg=encodeURIComponent('Ola '+nome+', tudo bem?');
+  window.open('https://wa.me/55'+num+'?text='+msg,'_blank');
 }
 
-// ─── E-mail ────────────────────────────────────────────────────────────────────
-function abrirEmail(email, nome) {
-  document.getElementById("email-para").value    = email;
-  document.getElementById("email-assunto").value = `Contato - ${nome}`;
-  document.getElementById("email-corpo").value   = `Olá ${nome},\n\n`;
-  document.getElementById("email-status").style.display = "none";
-  document.getElementById("modal-email").classList.add("open");
+function abrirEmail(email,nome){
+  document.getElementById('email-para').value=email;
+  document.getElementById('email-assunto').value='Contato - '+nome;
+  document.getElementById('email-corpo').value='Ola '+nome+',\n\n';
+  document.getElementById('email-status').style.display='none';
+  document.getElementById('modal-email').classList.add('open');
 }
 
-async function enviarEmail() {
-  const btn = document.getElementById("btn-enviar-email");
-  const status = document.getElementById("email-status");
-  btn.textContent = "Enviando..."; btn.disabled = true;
-  const r = await fetch("/email/enviar", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({
-    para: document.getElementById("email-para").value,
-    assunto: document.getElementById("email-assunto").value,
-    corpo: document.getElementById("email-corpo").value,
+async function enviarEmail(){
+  var btn=document.getElementById('btn-enviar-email');
+  var status=document.getElementById('email-status');
+  btn.textContent='Enviando...';btn.disabled=true;
+  var r=await fetch('/email/enviar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+    para:document.getElementById('email-para').value,
+    assunto:document.getElementById('email-assunto').value,
+    corpo:document.getElementById('email-corpo').value
   })});
-  const d = await r.json();
-  status.style.display = "block";
-  if (r.ok) {
-    status.style.cssText = "display:block;color:#27500a;background:#eaf3de;padding:10px;border-radius:7px;font-size:13px;margin-bottom:10px";
-    status.textContent = "✅ " + d.mensagem;
-    setTimeout(() => fechar("modal-email"), 1500);
-  } else {
-    status.style.cssText = "display:block;color:#791f1f;background:#fcebeb;padding:10px;border-radius:7px;font-size:13px;margin-bottom:10px";
-    status.textContent = "❌ " + d.erro;
-  }
-  btn.textContent = "📧 Enviar"; btn.disabled = false;
+  var d=await r.json();
+  status.style.display='block';
+  if(r.ok){status.style.cssText='display:block;color:#27500a;background:#eaf3de;padding:10px;border-radius:7px;font-size:13px;margin-bottom:10px';status.textContent='OK: '+d.mensagem;setTimeout(function(){fechar('modal-email');},1500);}
+  else{status.style.cssText='display:block;color:#791f1f;background:#fcebeb;padding:10px;border-radius:7px;font-size:13px;margin-bottom:10px';status.textContent='Erro: '+d.erro;}
+  btn.textContent='Enviar';btn.disabled=false;
 }
 
-// ─── Fila ───────────────────────────────────────────────────────────────────────
-async function carregarFila() {
-  const fila = await fetch("/fila").then(r=>r.json());
-  const el = document.getElementById("lista-fila");
-  if (!fila.length) { el.innerHTML = '<p style="color:#aaa;font-size:13px">Nenhum item aguardando aprovação.</p>'; return; }
-  el.innerHTML = fila.map(f => `
-    <div class="fila-card" id="fila-${f.id}">
-      <div class="info">
-        <strong>${f.nome}</strong>
-        <div class="meta">
-          ${f.categoria ? `<span class="cat-badge">${f.categoria}</span>` : ""}
-          ${f.cidade    ? ` · ${f.cidade}` : ""}${f.estado ? ` (${f.estado})` : ""}
-          ${f.cnpj      ? ` · CNPJ: ${f.cnpj}` : ""}
-          ${f.situacao_cnpj ? ` · <span style="color:${f.situacao_cnpj==='ATIVA'?'#27a96a':'#e24b4a'};font-weight:500">${f.situacao_cnpj}</span>` : ""}
-          ${f.contato   ? ` · ${f.contato}` : ""}
-          ${f.site      ? ` · <a href="${f.site}" target="_blank" style="color:#4f8ef7">${f.site}</a>` : ""}
-        </div>
-      </div>
-      <div class="actions">
-        <button class="btn btn-success btn-sm" onclick="aprovarFila(${f.id})">✅ Aprovar</button>
-        <button class="btn btn-danger  btn-sm" onclick="rejeitarFila(${f.id})">✕ Rejeitar</button>
-      </div>
-    </div>`).join("");
+async function carregarFila(){
+  var fila=await fetch('/fila').then(function(r){return r.json();});
+  var el=document.getElementById('lista-fila');
+  if(!fila.length){el.innerHTML='<p style="color:#aaa;font-size:13px">Nenhum item aguardando aprovacao.</p>';return;}
+  el.innerHTML=fila.map(function(f){
+    return '<div class="fila-card" id="fila-'+f.id+'">'
+      +'<div class="info"><strong>'+f.nome+'</strong>'
+      +'<div class="meta">'
+      +(f.categoria?'<span class="cat-badge">'+f.categoria+'</span>':'')
+      +(f.cidade?' · '+f.cidade:'')+(f.estado?' ('+f.estado+')':'')
+      +(f.cnpj?' · CNPJ: '+f.cnpj:'')
+      +(f.situacao_cnpj?' · <span style="color:'+(f.situacao_cnpj==='ATIVA'?'#27a96a':'#e24b4a')+';font-weight:500">'+f.situacao_cnpj+'</span>':'')
+      +(f.contato?' · '+f.contato:'')
+      +(f.site?' · <a href="'+f.site+'" target="_blank" style="color:#4f8ef7">'+f.site+'</a>':'')
+      +(f.email?' · <button class="btn btn-email btn-xs" onclick="abrirEmail(\''+f.email+'\',\''+f.nome+'\')">E-mail</button>':'')
+      +(f.whatsapp?' · <button class="btn btn-whatsapp btn-xs" onclick="abrirWhatsApp(\''+f.whatsapp+'\',\''+f.nome+'\')">WhatsApp</button>':'')
+      +'</div></div>'
+      +'<div class="actions">'
+      +'<button class="btn btn-success btn-sm" onclick="aprovarFila('+f.id+')">Aprovar</button>'
+      +'<button class="btn btn-danger btn-sm" onclick="rejeitarFila('+f.id+')">Rejeitar</button>'
+      +'</div></div>';
+  }).join('');
 }
 
-async function aprovarFila(id) {
-  await fetch(`/fila/${id}/aprovar`, {method:"POST"});
-  document.getElementById(`fila-${id}`)?.remove();
-  toast("Aprovado e salvo!"); carregarStats();
-}
-async function rejeitarFila(id) {
-  await fetch(`/fila/${id}/rejeitar`, {method:"POST"});
-  document.getElementById(`fila-${id}`)?.remove();
-  toast("Rejeitado."); carregarStats();
-}
-async function aprovarTodos() {
-  const r = await fetch("/fila/aprovar-todos", {method:"POST"}).then(r=>r.json());
-  toast(r.mensagem); carregarFila(); carregarStats(); carregarForn();
-}
+async function aprovarFila(id){await fetch('/fila/'+id+'/aprovar',{method:'POST'});document.getElementById('fila-'+id).remove();toast('Aprovado!');carregarStats();}
+async function rejeitarFila(id){await fetch('/fila/'+id+'/rejeitar',{method:'POST'});document.getElementById('fila-'+id).remove();toast('Rejeitado.');carregarStats();}
+async function aprovarTodos(){var r=await fetch('/fila/aprovar-todos',{method:'POST'}).then(function(r){return r.json();});toast(r.mensagem);carregarFila();carregarStats();carregarForn();}
 
-// ─── Histórico ──────────────────────────────────────────────────────────────────
-async function carregarHistorico() {
-  const hist = await fetch("/historico").then(r=>r.json());
-  const el = document.getElementById("lista-historico");
-  if (!hist.length) { el.innerHTML = '<p style="color:#aaa;font-size:13px;padding:20px">Nenhum registro ainda.</p>'; return; }
-  el.innerHTML = hist.map(h => `
-    <div class="hist-item">
-      <div class="hist-dot"></div>
-      <div class="info">
-        <div class="acao"><strong>${h.usuario}</strong> ${h.acao}</div>
-        <div class="det">${h.detalhe}</div>
-      </div>
-      <div class="time">${h.criado_em?.slice(0,16).replace("T"," ") || ""}</div>
-    </div>`).join("");
+async function carregarHistorico(){
+  var hist=await fetch('/historico').then(function(r){return r.json();});
+  var el=document.getElementById('lista-historico');
+  if(!hist.length){el.innerHTML='<p style="color:#aaa;font-size:13px;padding:20px">Nenhum registro ainda.</p>';return;}
+  el.innerHTML=hist.map(function(h){
+    return '<div class="hist-item"><div class="hist-dot"></div>'
+      +'<div class="info"><div class="acao"><strong>'+h.usuario+'</strong> '+h.acao+'</div>'
+      +'<div class="det">'+h.detalhe+'</div></div>'
+      +'<div class="time">'+(h.criado_em?h.criado_em.slice(0,16).replace('T',' '):'')+'</div></div>';
+  }).join('');
 }
 
-// ─── Categorias ─────────────────────────────────────────────────────────────────
-async function carregarCats() {
-  todasCats = await fetch("/categorias").then(r=>r.json());
-  const el = document.getElementById("cat-tree");
-  if (!todasCats.length) { el.innerHTML = '<p style="color:#aaa;font-size:13px">Nenhuma categoria ainda.</p>'; return; }
-  el.innerHTML = todasCats.map(c => `
-    <div class="cat-node">
-      <div class="cat-header">
-        <strong>${c.nome}</strong>
-        ${perfilAtual==="admin" ? `<button class="btn btn-danger btn-xs" onclick="deletarCat(${c.id})">Remover categoria</button>` : ""}
-      </div>
-      <div class="sub-list">
-        ${c.subcategorias.map(s => `
-          <div class="sub-item">${s.nome}
-            <button onclick="deletarSub(${s.id},${c.id})" title="Remover">✕</button>
-          </div>`).join("")}
-      </div>
-      <div class="add-sub">
-        <input id="sub-input-${c.id}" placeholder="Nova subcategoria..." onkeydown="if(event.key==='Enter') adicionarSub(${c.id})">
-        <button class="btn btn-ghost btn-sm" onclick="adicionarSub(${c.id})">+ Adicionar</button>
-      </div>
-    </div>`).join("");
+async function carregarCats(){
+  todasCats=await fetch('/categorias').then(function(r){return r.json();});
+  var el=document.getElementById('cat-tree');
+  if(!todasCats.length){el.innerHTML='<p style="color:#aaa;font-size:13px">Nenhuma categoria ainda.</p>';return;}
+  el.innerHTML=todasCats.map(function(c){
+    return '<div class="cat-node"><div class="cat-header"><strong>'+c.nome+'</strong>'
+      +(perfilAtual==='admin'?'<button class="btn btn-danger btn-xs" onclick="deletarCat('+c.id+')">Remover</button>':'')
+      +'</div><div class="sub-list">'
+      +c.subcategorias.map(function(s){return '<div class="sub-item">'+s.nome+'<button onclick="deletarSub('+s.id+')">x</button></div>';}).join('')
+      +'</div><div class="add-sub">'
+      +'<input id="sub-input-'+c.id+'" placeholder="Nova subcategoria..." onkeydown="if(event.key===\'Enter\')adicionarSub('+c.id+')">'
+      +'<button class="btn btn-ghost btn-sm" onclick="adicionarSub('+c.id+')">+ Adicionar</button>'
+      +'</div></div>';
+  }).join('');
 }
 
-function abrirModalCat() { document.getElementById("cat-nome").value=""; document.getElementById("modal-cat").classList.add("open"); }
+function abrirModalCat(){document.getElementById('cat-nome').value='';document.getElementById('modal-cat').classList.add('open');}
+async function salvarCat(){var nome=document.getElementById('cat-nome').value.trim();if(!nome)return;await fetch('/categorias',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nome:nome})});fechar('modal-cat');toast('Categoria criada!');carregarCats();carregarCatsFiltro();}
+async function deletarCat(id){if(!confirm('Remover categoria?'))return;await fetch('/categorias/'+id,{method:'DELETE'});toast('Removida!');carregarCats();carregarCatsFiltro();}
+async function adicionarSub(catId){var input=document.getElementById('sub-input-'+catId);var nome=input.value.trim();if(!nome)return;await fetch('/subcategorias',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nome:nome,categoria_id:catId})});input.value='';toast('Subcategoria adicionada!');carregarCats();carregarCatsFiltro();}
+async function deletarSub(id){await fetch('/subcategorias/'+id,{method:'DELETE'});toast('Removida!');carregarCats();carregarCatsFiltro();}
 
-async function salvarCat() {
-  const nome = document.getElementById("cat-nome").value.trim();
-  if (!nome) return;
-  await fetch("/categorias", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({nome})});
-  fechar("modal-cat"); toast("Categoria criada!"); carregarCats(); carregarCatsFiltro();
+async function carregarUsuarios(){
+  var lista=await fetch('/usuarios').then(function(r){return r.json();});
+  var el=document.getElementById('lista-usuarios');
+  el.innerHTML=lista.map(function(u){
+    return '<div class="user-card"><div class="user-avatar">'+u.nome.slice(0,2).toUpperCase()+'</div>'
+      +'<div class="info"><strong>'+u.nome+'</strong><span>'+u.email+' · <span class="perfil-badge perfil-'+u.perfil+'">'+u.perfil+'</span></span></div>'
+      +'<button class="btn btn-danger btn-sm" onclick="deletarUser('+u.id+')">Desativar</button></div>';
+  }).join('');
+}
+function abrirModalUser(){['u-nome','u-email','u-senha'].forEach(function(k){document.getElementById(k).value='';});document.getElementById('modal-user').classList.add('open');}
+async function salvarUser(){var d={nome:document.getElementById('u-nome').value.trim(),email:document.getElementById('u-email').value.trim(),senha:document.getElementById('u-senha').value,perfil:document.getElementById('u-perfil').value};if(!d.nome||!d.email||!d.senha){alert('Preencha todos os campos!');return;}var r=await fetch('/usuarios',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});var resp=await r.json();if(!r.ok){alert(resp.erro);return;}fechar('modal-user');toast('Usuario criado!');carregarUsuarios();}
+async function deletarUser(id){if(!confirm('Desativar usuario?'))return;await fetch('/usuarios/'+id,{method:'DELETE'});toast('Desativado!');carregarUsuarios();}
+
+async function carregarConfigEmail(){var cfg=await fetch('/email/config').then(function(r){return r.json();});if(cfg.host)document.getElementById('cfg-host').value=cfg.host;if(cfg.porta)document.getElementById('cfg-porta').value=cfg.porta;if(cfg.usuario)document.getElementById('cfg-usuario').value=cfg.usuario;if(cfg.remetente)document.getElementById('cfg-remetente').value=cfg.remetente;}
+async function salvarConfigEmail(){var d={host:document.getElementById('cfg-host').value.trim(),porta:parseInt(document.getElementById('cfg-porta').value),usuario:document.getElementById('cfg-usuario').value.trim(),senha:document.getElementById('cfg-senha').value,remetente:document.getElementById('cfg-remetente').value.trim()};await fetch('/email/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});toast('Configuracao salva!');}
+
+async function executarBusca(){
+  var cat=document.getElementById('busca-cat').value.trim();
+  var cidade=document.getElementById('busca-cidade').value.trim();
+  var nome=document.getElementById('busca-nome').value.trim();
+  var resEl=document.getElementById('busca-resultado');
+  var btn=document.getElementById('btn-buscar');
+  if(!cat){alert('Informe a categoria!');return;}
+  btn.textContent='Buscando...';btn.disabled=true;resEl.style.display='none';
+  try{
+    var r=await fetch('/buscar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({categoria:cat,cidade:cidade,nome:nome})}).then(function(r){return r.json();});
+    resEl.className='busca-resultado success';
+    resEl.textContent='Encontrados '+r.encontrados+' resultados - '+r.novos_na_fila+' novos adicionados a fila.';
+    resEl.style.display='block';carregarStats();
+  }catch(e){resEl.className='busca-resultado error';resEl.textContent='Erro ao buscar.';resEl.style.display='block';}
+  btn.textContent='Buscar';btn.disabled=false;
 }
 
-async function deletarCat(id) {
-  if (!confirm("Remover esta categoria e todas as subcategorias?")) return;
-  await fetch(`/categorias/${id}`, {method:"DELETE"});
-  toast("Removida!"); carregarCats(); carregarCatsFiltro();
+async function carregarConfigs(){
+  var configs=await fetch('/config-busca').then(function(r){return r.json();});
+  var el=document.getElementById('lista-config');
+  if(!configs.length){el.innerHTML='<p style="color:#aaa;font-size:13px">Nenhuma regra configurada.</p>';return;}
+  el.innerHTML=configs.map(function(c){
+    return '<div class="fila-card"><div style="font-size:20px">&#128257;</div>'
+      +'<div class="info"><strong>'+c.categoria+'</strong>'
+      +'<div class="meta">'+(c.cidade||'Brasil')+' · a cada '+c.intervalo_horas+'h'+(c.ultima_busca?' · ultima: '+c.ultima_busca.slice(0,16):'')+'</div></div>'
+      +'<button class="btn btn-danger btn-sm" onclick="deletarConfig('+c.id+')">Remover</button></div>';
+  }).join('');
 }
+function abrirModalConfig(){document.getElementById('modal-config').classList.add('open');}
+async function salvarConfig(){var d={categoria:document.getElementById('cfg-cat').value.trim(),cidade:document.getElementById('cfg-cidade2').value.trim(),intervalo_horas:parseInt(document.getElementById('cfg-intervalo').value)};if(!d.categoria){alert('Informe a categoria!');return;}await fetch('/config-busca',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});fechar('modal-config');toast('Regra salva!');carregarConfigs();}
+async function deletarConfig(id){if(!confirm('Remover regra?'))return;await fetch('/config-busca/'+id,{method:'DELETE'});toast('Removida!');carregarConfigs();}
 
-async function adicionarSub(catId) {
-  const input = document.getElementById(`sub-input-${catId}`);
-  const nome  = input.value.trim();
-  if (!nome) return;
-  await fetch("/subcategorias", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({nome, categoria_id: catId})});
-  input.value = ""; toast("Subcategoria adicionada!"); carregarCats(); carregarCatsFiltro();
-}
-
-async function deletarSub(id) {
-  await fetch(`/subcategorias/${id}`, {method:"DELETE"});
-  toast("Removida!"); carregarCats(); carregarCatsFiltro();
-}
-
-// ─── Usuários ────────────────────────────────────────────────────────────────────
-async function carregarUsuarios() {
-  const lista = await fetch("/usuarios").then(r=>r.json());
-  const el = document.getElementById("lista-usuarios");
-  el.innerHTML = lista.map(u => `
-    <div class="user-card">
-      <div class="user-avatar">${u.nome.slice(0,2).toUpperCase()}</div>
-      <div class="info">
-        <strong>${u.nome}</strong>
-        <span>${u.email} · <span class="perfil-badge perfil-${u.perfil}">${u.perfil}</span></span>
-      </div>
-      <button class="btn btn-danger btn-sm" onclick="deletarUser(${u.id})">Desativar</button>
-    </div>`).join("");
-}
-
-function abrirModalUser() {
-  ["u-nome","u-email","u-senha"].forEach(k => document.getElementById(k).value="");
-  document.getElementById("modal-user").classList.add("open");
-}
-
-async function salvarUser() {
-  const d = { nome: document.getElementById("u-nome").value.trim(), email: document.getElementById("u-email").value.trim(), senha: document.getElementById("u-senha").value, perfil: document.getElementById("u-perfil").value };
-  if (!d.nome || !d.email || !d.senha) { alert("Preencha todos os campos!"); return; }
-  const r = await fetch("/usuarios", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(d)});
-  const resp = await r.json();
-  if (!r.ok) { alert(resp.erro); return; }
-  fechar("modal-user"); toast("Usuário criado!"); carregarUsuarios();
-}
-
-async function deletarUser(id) {
-  if (!confirm("Desativar este usuário?")) return;
-  await fetch(`/usuarios/${id}`, {method:"DELETE"});
-  toast("Usuário desativado!"); carregarUsuarios();
-}
-
-// ─── Config e-mail ───────────────────────────────────────────────────────────────
-async function carregarConfigEmail() {
-  const cfg = await fetch("/email/config").then(r=>r.json());
-  if (cfg.host)      document.getElementById("cfg-host").value      = cfg.host;
-  if (cfg.porta)     document.getElementById("cfg-porta").value     = cfg.porta;
-  if (cfg.usuario)   document.getElementById("cfg-usuario").value   = cfg.usuario;
-  if (cfg.remetente) document.getElementById("cfg-remetente").value = cfg.remetente;
-}
-
-async function salvarConfigEmail() {
-  const d = { host: document.getElementById("cfg-host").value.trim(), porta: parseInt(document.getElementById("cfg-porta").value), usuario: document.getElementById("cfg-usuario").value.trim(), senha: document.getElementById("cfg-senha").value, remetente: document.getElementById("cfg-remetente").value.trim() };
-  await fetch("/email/config", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(d)});
-  toast("Configuração salva!");
-}
-
-// ─── Busca manual ────────────────────────────────────────────────────────────────
-async function executarBusca() {
-  const cat    = document.getElementById("busca-cat").value.trim();
-  const cidade = document.getElementById("busca-cidade").value.trim();
-  const resEl  = document.getElementById("busca-resultado");
-  const btn    = document.getElementById("btn-buscar");
-  if (!cat) { alert("Informe a categoria!"); return; }
-  btn.textContent = "⏳ Buscando..."; btn.disabled = true; resEl.style.display = "none";
-  try {
-    const r = await fetch("/buscar", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({categoria: cat, cidade, nome: document.getElementById("busca-nome").value.trim()})}).then(r=>r.json());
-    resEl.className = "busca-resultado success";
-    resEl.textContent = `✅ Encontrados ${r.encontrados} resultados — ${r.novos_na_fila} novos adicionados à fila.`;
-    resEl.style.display = "block"; carregarStats();
-  } catch { resEl.className = "busca-resultado error"; resEl.textContent = "Erro ao buscar."; resEl.style.display = "block"; }
-  btn.textContent = "🔍 Buscar"; btn.disabled = false;
-}
-
-// ─── Busca automática ────────────────────────────────────────────────────────────
-async function carregarConfigs() {
-  const configs = await fetch("/config-busca").then(r=>r.json());
-  const el = document.getElementById("lista-config");
-  if (!configs.length) { el.innerHTML = '<p style="color:#aaa;font-size:13px">Nenhuma regra configurada.</p>'; return; }
-  el.innerHTML = configs.map(c => `
-    <div class="fila-card">
-      <div style="font-size:20px">🔁</div>
-      <div class="info">
-        <strong>${c.categoria}</strong>
-        <div class="meta">${c.cidade||"Brasil"} · a cada ${c.intervalo_horas}h${c.ultima_busca ? ` · última: ${c.ultima_busca.slice(0,16)}` : ""}</div>
-      </div>
-      <button class="btn btn-danger btn-sm" onclick="deletarConfig(${c.id})">Remover</button>
-    </div>`).join("");
-}
-
-function abrirModalConfig() { document.getElementById("modal-config").classList.add("open"); }
-
-async function salvarConfig() {
-  const d = { categoria: document.getElementById("cfg-cat").value.trim(), cidade: document.getElementById("cfg-cidade2").value.trim(), intervalo_horas: parseInt(document.getElementById("cfg-intervalo").value) };
-  if (!d.categoria) { alert("Informe a categoria!"); return; }
-  await fetch("/config-busca", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(d)});
-  fechar("modal-config"); toast("Regra salva!"); carregarConfigs();
-}
-
-async function deletarConfig(id) {
-  if (!confirm("Remover esta regra?")) return;
-  await fetch(`/config-busca/${id}`, {method:"DELETE"});
-  toast("Removida!"); carregarConfigs();
-}
-
-// ─── Utilitários ─────────────────────────────────────────────────────────────────
-function fechar(id) { document.getElementById(id).classList.remove("open"); }
-
-function toast(msg, tipo="") {
-  const el = document.getElementById("toast");
-  el.textContent = msg; el.className = "toast" + (tipo ? " "+tipo : "");
-  el.classList.add("show");
-  setTimeout(() => el.classList.remove("show"), 2800);
-}
+function fechar(id){document.getElementById(id).classList.remove('open');}
+function toast(msg){var el=document.getElementById('toast');el.textContent=msg;el.className='toast';el.classList.add('show');setTimeout(function(){el.classList.remove('show');},2800);}
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
