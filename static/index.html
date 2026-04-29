@@ -204,14 +204,17 @@ tr:hover td { background: #fafaf8; }
   </aside>
 
   <main class="main">
-    <div class="stats" id="stats-cards">
-      <div class="stat-card"><div class="label">Fornecedores</div><div class="value" id="stat-total">–</div></div>
-      <div class="stat-card"><div class="label">Categorias</div><div class="value" id="stat-cats">–</div></div>
+    <div class="value" id="stat-cats">–</div></div>
       <div class="stat-card"><div class="label">Aguardando aprovação</div><div class="value alert" id="stat-pendentes">–</div></div>
     </div>
 
     <!-- Fornecedores -->
-    <div class="section active" id="sec-fornecedores">
+    <div class="section active" id="sec-fornecedores"><div class="stats" id="stats-cards">
+      <div class="stat-card"><div class="label">Fornecedores</div><div class="value" id="stat-total">–</div></div>
+      <div class="stat-card"><div class="label">Categorias</div>
+    
+    
+    
       <div class="section-header">
         <div class="section-title">Fornecedores</div>
         <button class="btn btn-primary" onclick="abrirModalForn()">+ Novo fornecedor</button>
@@ -890,6 +893,7 @@ function toast(msg, tipo="") {
 </script>
 </body>
 </html>
+
 
 
 
