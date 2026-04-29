@@ -474,7 +474,7 @@ function nav(el, sec) {
   if (sec === "historico")     carregarHistorico();
   if (sec === "categorias")    carregarCats();
   if (sec === "usuarios")      carregarUsuarios();
-  if (sec === "auto")          carregarConfigs();
+  if (sec === "auto") { carregarConfigs(); }
   if (sec === "fornecedores")  { carregarForn(); carregarCatsFiltro(); }
 }
 
@@ -889,6 +889,7 @@ function toast(msg, tipo="") {
 </script>
 </body>
 </html>
+
 
 
 
