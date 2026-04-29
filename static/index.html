@@ -204,7 +204,7 @@ tr:hover td { background: #fafaf8; }
   </aside>
 
   <main class="main">
-    <div class="stats">
+    <div class="stats" id="stats-cards">
       <div class="stat-card"><div class="label">Fornecedores</div><div class="value" id="stat-total">–</div></div>
       <div class="stat-card"><div class="label">Categorias</div><div class="value" id="stat-cats">–</div></div>
       <div class="stat-card"><div class="label">Aguardando aprovação</div><div class="value alert" id="stat-pendentes">–</div></div>
@@ -465,7 +465,7 @@ async function verificarSessao() {
 verificarSessao();
 
 // ─── Nav ────────────────────────────────────────────────────────────────────────
-function nav(el, sec) {
+function nav(el, sec) { document.getElementById("stats-cards").style.display = (sec === "fornecedores") ? "grid" : "none";
   document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
   document.getElementById("sec-"+sec).classList.add("active");
@@ -889,6 +889,7 @@ function toast(msg, tipo="") {
 </script>
 </body>
 </html>
+
 
 
 
