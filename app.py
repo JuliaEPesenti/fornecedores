@@ -15,8 +15,8 @@ DB = "fornecedores.db"
 
 # ─── Banco ────────────────────────────────────────────────────────────────────
 def conectar():
-    conn = sqlite3.connect(DB)
-    conn.row_factory = sqlite3.Row
+    conn = psycopg2.connect(DATABASE_URL)
+    conn.autocommit = False
     return conn
 
 def criar_banco():
@@ -545,5 +545,6 @@ if __name__ == "__main__":
         app.run(debug=False, use_reloader=False, port=5000)
     except (KeyboardInterrupt, SystemExit):
         scheduler.shutdown()
+
 
 
