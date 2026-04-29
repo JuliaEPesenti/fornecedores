@@ -47,7 +47,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 /* Seções */
 .section { display: none; } .section.active { display: block !important; }
-.section.active { display: block; }
+.section.active { display: block !important; margin-top: 0; }
 .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
 .section-title { font-size: 18px; font-weight: 600; }
 
@@ -890,6 +890,7 @@ function toast(msg, tipo="") {
 </script>
 </body>
 </html>
+
 
 
 
