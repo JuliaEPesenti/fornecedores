@@ -190,7 +190,7 @@ tr:hover td { background: #fafaf8; }
       <div class="nav-item" data-sec="fila" onclick="navAuto(this,'fila')" id="nav-fila">🔔 Aprovações</div>
       <div class="nav-item" data-sec="historico" onclick="navAuto(this,'historico')">📋 Histórico</div>
       <div class="nav-sep">Busca</div>
-      <div class="nav-item" data-sec="busca" onclick="navAuto(this,'busca')">🔍 Buscar na Web</div>
+      <div class="nav-item" data-sec="busca" onclick="nav(this,'busca')">🔍 Buscar na Web</div><div class="nav-item" data-sec="auto" onclick="nav(this,'auto')">⚙️ Busca Automática</div>
       
       <div class="nav-sep">Cadastros</div>
       <div class="nav-item" data-sec="categorias" onclick="navAuto(this,'categorias')">🗂️ Categorias</div>
@@ -890,6 +890,7 @@ function toast(msg, tipo="") {
 </script>
 </body>
 </html>
+
 
 
 
