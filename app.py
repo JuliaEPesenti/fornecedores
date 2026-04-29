@@ -380,10 +380,14 @@ def listar_historico():
 @requer_login
 def stats():
     with conectar() as conn:
-        total    = conn.cursor().execute("SELECT COUNT(*) FROM fornecedores WHERE ativo=1").fetchone()[0]
-        pendente = conn.cursor().execute("SELECT COUNT(*) FROM fila_aprovacao WHERE status='pendente'").fetchone()[0]
-        cats     = conn.cursor().execute("SELECT COUNT(*) FROM categorias").fetchone()[0]
-    return jsonify({"total": total, "pendentes": pendente, "categorias": cats})
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) FROM fornecedores WHERE ativo=1")
+        total = cur.fetchone()[0]
+        cur.execute("SELECT COUNT(*) FROM categorias")
+        cats = cur.fetchone()[0]
+        cur.execute("SELECT COUNT(*) FROM fila_aprovacao WHERE status='pendente'")
+        pendentes = cur.fetchone()[0]
+    return jsonify({"total": total, "pendentes": pendentes, "categorias": cats})
 
 # ─── Fila ─────────────────────────────────────────────────────────────────────
 @app.route("/fila")
@@ -545,6 +549,8 @@ if __name__ == "__main__":
         app.run(debug=False, use_reloader=False, port=5000)
     except (KeyboardInterrupt, SystemExit):
         scheduler.shutdown()
+
+
 
 
 
