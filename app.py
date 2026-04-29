@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, send_from_directory, session
-import sqlite3, requests, re, smtplib, hashlib, os
+import psycopg2, psycopg2.extras, requests, re, smtplib, hashlib, os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from bs4 import BeautifulSoup
@@ -543,3 +543,4 @@ if __name__ == "__main__":
         app.run(debug=False, use_reloader=False, port=5000)
     except (KeyboardInterrupt, SystemExit):
         scheduler.shutdown()
+
