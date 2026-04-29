@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="/static/favicon.ico">
@@ -45,13 +45,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .stat-card .value { font-size: 28px; font-weight: 600; }
 .stat-card .value.alert { color: #e24b4a; }
 
-/* Seções */
+/* Se��es */
 .section { display: none; } .section.active { display: block !important; }
 .section.active { display: block; }
 .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
 .section-title { font-size: 18px; font-weight: 600; }
 
-/* Botões */
+/* Bot�es */
 .btn { padding: 8px 16px; border-radius: 7px; border: none; cursor: pointer; font-size: 13px; font-weight: 500; transition: all .15s; }
 .btn-primary { background: #4f8ef7; color: #fff; }
 .btn-primary:hover { background: #3a7ef0; }
@@ -109,7 +109,7 @@ tr:hover td { background: #fafaf8; }
 .fila-card .info .meta { font-size: 12px; color: #888; }
 .fila-card .actions { display: flex; gap: 8px; flex-shrink: 0; }
 
-/* Histórico */
+/* Hist�rico */
 .hist-item { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid #f0f0ec; }
 .hist-item:last-child { border-bottom: none; }
 .hist-dot { width: 8px; height: 8px; border-radius: 50%; background: #4f8ef7; margin-top: 4px; flex-shrink: 0; }
@@ -131,7 +131,7 @@ tr:hover td { background: #fafaf8; }
 .add-sub input { flex: 1; padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; outline: none; }
 .add-sub input:focus { border-color: #4f8ef7; }
 
-/* Usuários */
+/* Usu�rios */
 .user-card { background: #fff; border-radius: 10px; border: 1px solid #e8e8e4; padding: 14px 18px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; }
 .user-avatar { width: 38px; height: 38px; border-radius: 50%; background: #e6f1fb; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; color: #0c447c; flex-shrink: 0; }
 .user-card .info { flex: 1; }
@@ -156,7 +156,7 @@ tr:hover td { background: #fafaf8; }
 .toast.show { opacity: 1; transform: translateY(0); }
 .toast.error { background: #c73b3a; }
 
-/* Ações da tabela */
+/* A��es da tabela */
 .acoes { display: flex; gap: 4px; flex-wrap: nowrap; }
 </style>
 </head>
@@ -172,7 +172,7 @@ tr:hover td { background: #fafaf8; }
     <p>Entre com sua conta para continuar</p>
     <div class="login-error" id="login-error"></div>
     <div class="form-group"><label>E-mail</label><input id="login-email" type="email" placeholder="seu@email.com" value="admin@sistema.com"></div>
-    <div class="form-group"><label>Senha</label><input id="login-senha" type="password" placeholder="••••••••" value="admin123"></div>
+    <div class="form-group"><label>Senha</label><input id="login-senha" type="password" placeholder="��������" value="admin123"></div>
     <button class="btn btn-primary" onclick="fazerLogin()">Entrar</button>
   </div>
 </div>
@@ -186,28 +186,28 @@ tr:hover td { background: #fafaf8; }
 </div>
     <div class="nav-items">
       <div class="nav-sep">Principal</div>
-      <div class="nav-item active" data-sec="fornecedores" onclick="nav(this,'fornecedores')">🏢 Fornecedores</div>
-      <div class="nav-item" data-sec="fila" onclick="nav(this,'fila')" id="nav-fila">🔔 Aprovações</div>
-      <div class="nav-item" data-sec="historico" onclick="nav(this,'historico')">📋 Histórico</div>
+      <div class="nav-item active" data-sec="fornecedores" onclick="nav(this,'fornecedores')">?? Fornecedores</div>
+      <div class="nav-item" data-sec="fila" onclick="nav(this,'fila')" id="nav-fila">?? Aprova��es</div>
+      <div class="nav-item" data-sec="historico" onclick="nav(this,'historico')">?? Hist�rico</div>
       <div class="nav-sep">Busca</div>
-      <div class="nav-item" data-sec="busca" onclick="nav(this,'busca')">🔍 Buscar na Web</div>
+      <div class="nav-item" data-sec="busca" onclick="nav(this,'busca')">?? Buscar na Web</div>
       
-      <div class="nav-item" data-sec="auto" onclick="navAuto(this)">⚙️ Busca Automática</div><div class="nav-sep">Cadastros</div>
-      <div class="nav-item" data-sec="categorias" onclick="nav(this,'categorias')">🗂️ Categorias</div>
-      <div class="nav-item admin-only" data-sec="usuarios" onclick="nav(this,'usuarios')" style="display:none">👥 Usuários</div>
-      <div class="nav-item admin-only" data-sec="configuracoes" onclick="nav(this,'configuracoes')" style="display:none">🔧 Configurações</div>
+      <div class="nav-item" data-sec="auto" onclick=nav(this,'auto')">?? Busca Autom�tica</div><div class="nav-sep">Cadastros</div>
+      <div class="nav-item" data-sec="categorias" onclick="nav(this,'categorias')">??? Categorias</div>
+      <div class="nav-item admin-only" data-sec="usuarios" onclick="nav(this,'usuarios')" style="display:none">?? Usu�rios</div>
+      <div class="nav-item admin-only" data-sec="configuracoes" onclick="nav(this,'configuracoes')" style="display:none">?? Configura��es</div>
     </div>
     <div class="sidebar-footer">
-      <div class="user-info"><strong id="sidebar-nome">–</strong><span id="sidebar-perfil">–</span></div>
+      <div class="user-info"><strong id="sidebar-nome">�</strong><span id="sidebar-perfil">�</span></div>
       <button class="btn-logout" onclick="fazerLogout()">Sair</button>
     </div>
   </aside>
 
   <main class="main">
     <div class="stats" id="stats-cards">
-      <div class="stat-card"><div class="label">Fornecedores</div><div class="value" id="stat-total">–</div></div>
-      <div class="stat-card"><div class="label">Categorias</div><div class="value" id="stat-cats">–</div></div>
-      <div class="stat-card"><div class="label">Aguardando aprovação</div><div class="value alert" id="stat-pendentes">–</div></div>
+      <div class="stat-card"><div class="label">Fornecedores</div><div class="value" id="stat-total">�</div></div>
+      <div class="stat-card"><div class="label">Categorias</div><div class="value" id="stat-cats">�</div></div>
+      <div class="stat-card"><div class="label">Aguardando aprova��o</div><div class="value alert" id="stat-pendentes">�</div></div>
     </div>
 
     <!-- Fornecedores -->
@@ -223,23 +223,23 @@ tr:hover td { background: #fafaf8; }
         <select id="filtro-cidade" onchange="filtrarForn()">
           <option value="">Todas as cidades</option>
           <option value="Joinville">Joinville</option>
-          <option value="São Paulo">São Paulo</option>
+          <option value="S�o Paulo">S�o Paulo</option>
         </select>
         <select id="filtro-estado" onchange="filtrarForn()">
           <option value="">Todos os estados</option>
           <option value="SC">Santa Catarina (SC)</option>
-          <option value="SP">São Paulo (SP)</option>
+          <option value="SP">S�o Paulo (SP)</option>
           <option value="RJ">Rio de Janeiro (RJ)</option>
           <option value="MG">Minas Gerais (MG)</option>
-          <option value="PR">Paraná (PR)</option>
+          <option value="PR">Paran� (PR)</option>
           <option value="RS">Rio Grande do Sul (RS)</option>
-          <option value="GO">Goiás (GO)</option>
+          <option value="GO">Goi�s (GO)</option>
           <option value="BA">Bahia (BA)</option>
         </select>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Nome</th><th>Categoria</th><th>Subcategoria</th><th>CNPJ</th><th>Situação</th><th>Contato</th><th>Cidade/Estado</th><th>Ações</th></tr></thead>
+          <thead><tr><th>Nome</th><th>Categoria</th><th>Subcategoria</th><th>CNPJ</th><th>Situa��o</th><th>Contato</th><th>Cidade/Estado</th><th>A��es</th></tr></thead>
           <tbody id="tbody-forn"></tbody>
         </table>
       </div>
@@ -248,15 +248,15 @@ tr:hover td { background: #fafaf8; }
     <!-- Fila -->
     <div class="section" id="sec-fila">
       <div class="section-header">
-        <div class="section-title">Aguardando aprovação</div>
-        <button class="btn btn-success" onclick="aprovarTodos()">✅ Aprovar todos</button>
+        <div class="section-title">Aguardando aprova��o</div>
+        <button class="btn btn-success" onclick="aprovarTodos()">? Aprovar todos</button>
       </div>
       <div id="lista-fila"></div>
     </div>
 
-    <!-- Histórico -->
+    <!-- Hist�rico -->
     <div class="section" id="sec-historico">
-      <div class="section-title" style="margin-bottom:18px">Histórico de alterações</div>
+      <div class="section-title" style="margin-bottom:18px">Hist�rico de altera��es</div>
       <div class="table-wrap" style="padding:0 20px">
         <div id="lista-historico"></div>
       </div>
@@ -268,18 +268,18 @@ tr:hover td { background: #fafaf8; }
       <div class="busca-box">
         <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
           <div class="form-group" style="flex:1;min-width:140px"><label>Categoria / Especificidade</label><input id="busca-cat" placeholder="Ex: Queijo, Computador..."><div class="form-group" style="flex:1;min-width:140px"><label>Nome (opcional)</label><input id="busca-nome" placeholder="Ex: Sadia, BRF..."></div>
-          <div class="form-group" style="flex:1;min-width:140px"><label>Cidade (opcional)</label><input id="busca-cidade" placeholder="Ex: São Paulo"></div>
-          <button class="btn btn-primary" id="btn-buscar" onclick="executarBusca()">🔍 Buscar</button>
+          <div class="form-group" style="flex:1;min-width:140px"><label>Cidade (opcional)</label><input id="busca-cidade" placeholder="Ex: S�o Paulo"></div>
+          <button class="btn btn-primary" id="btn-buscar" onclick="executarBusca()">?? Buscar</button>
         </div>
         <div class="busca-resultado" id="busca-resultado"></div>
       </div>
-      <p style="font-size:13px;color:#888">Os resultados vão para a fila de aprovação. Você revisa antes de salvar.</p>
+      <p style="font-size:13px;color:#888">Os resultados v�o para a fila de aprova��o. Voc� revisa antes de salvar.</p>
     </div>
 
-    <!-- Busca automática -->
+    <!-- Busca autom�tica -->
     <div class="section" id="sec-auto">
       <div class="section-header">
-        <div class="section-title">Busca automática</div>
+        <div class="section-title">Busca autom�tica</div>
         <button class="btn btn-primary" onclick="abrirModalConfig()">+ Adicionar regra</button>
       </div>
       <div id="lista-config"></div>
@@ -294,31 +294,31 @@ tr:hover td { background: #fafaf8; }
       <div class="cat-tree" id="cat-tree"></div>
     </div>
 
-    <!-- Usuários (admin) -->
+    <!-- Usu�rios (admin) -->
     <div class="section" id="sec-usuarios">
       <div class="section-header">
-        <div class="section-title">Usuários do sistema</div>
-        <button class="btn btn-primary" onclick="abrirModalUser()">+ Novo usuário</button>
+        <div class="section-title">Usu�rios do sistema</div>
+        <button class="btn btn-primary" onclick="abrirModalUser()">+ Novo usu�rio</button>
       </div>
       <div id="lista-usuarios"></div>
     </div>
 
-    <!-- Configurações (admin) -->
+    <!-- Configura��es (admin) -->
     <div class="section" id="sec-configuracoes">
-      <div class="section-title" style="margin-bottom:18px">Configurações de e-mail</div>
+      <div class="section-title" style="margin-bottom:18px">Configura��es de e-mail</div>
       <div class="config-box">
         <h3>Servidor SMTP (e-mail corporativo)</h3>
         <div class="form-grid">
           <div class="form-group"><label>Servidor SMTP</label><input id="cfg-host" placeholder="mail.suaempresa.com.br"></div>
           <div class="form-group"><label>Porta</label><input id="cfg-porta" type="number" value="587"></div>
-          <div class="form-group"><label>Usuário (e-mail)</label><input id="cfg-usuario" placeholder="seu@empresa.com.br"></div>
-          <div class="form-group"><label>Senha</label><input id="cfg-senha" type="password" placeholder="••••••••"></div>
+          <div class="form-group"><label>Usu�rio (e-mail)</label><input id="cfg-usuario" placeholder="seu@empresa.com.br"></div>
+          <div class="form-group"><label>Senha</label><input id="cfg-senha" type="password" placeholder="��������"></div>
           <div class="form-group full"><label>E-mail remetente</label><input id="cfg-remetente" placeholder="seu@empresa.com.br"></div>
         </div>
         <div style="margin-top:16px;display:flex;gap:10px">
-          <button class="btn btn-primary" onclick="salvarConfigEmail()">Salvar configuração</button>
+          <button class="btn btn-primary" onclick="salvarConfigEmail()">Salvar configura��o</button>
         </div>
-        <p style="font-size:12px;color:#aaa;margin-top:10px">Peça ao seu provedor de e-mail as configurações SMTP. Geralmente estão no painel do webmail.</p>
+        <p style="font-size:12px;color:#aaa;margin-top:10px">Pe�a ao seu provedor de e-mail as configura��es SMTP. Geralmente est�o no painel do webmail.</p>
       </div>
     </div>
   </main>
@@ -339,11 +339,11 @@ tr:hover td { background: #fafaf8; }
       <div class="form-group"><label>Telefone</label><input id="f-contato" placeholder="(11) 9xxxx-xxxx"></div>
       <div class="form-group"><label>WhatsApp</label><input id="f-whatsapp" placeholder="(11) 9xxxx-xxxx"></div>
       <div class="form-group"><label>E-mail</label><input id="f-email" placeholder="contato@empresa.com"></div>
-      <div class="form-group"><label>Cidade</label><input id="f-cidade" placeholder="Ex: São Paulo"></div>
+      <div class="form-group"><label>Cidade</label><input id="f-cidade" placeholder="Ex: S�o Paulo"></div>
       <div class="form-group full"><label>Site</label><input id="f-site" placeholder="https://..."></div>
       <div class="form-group"><label>CNPJ</label><input id="f-cnpj" placeholder="00.000.000/0000-00"></div>
       <div class="form-group"><label>Estado (sigla)</label><input id="f-estado" placeholder="Ex: SC, SP"></div>
-      <div class="form-group full"><label>Endereço</label><input id="f-endereco" placeholder="Rua, número"></div>
+      <div class="form-group full"><label>Endere�o</label><input id="f-endereco" placeholder="Rua, n�mero"></div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="fechar('modal-forn')">Cancelar</button>
@@ -362,7 +362,7 @@ tr:hover td { background: #fafaf8; }
     <div id="email-status" style="font-size:13px;margin-bottom:10px;display:none"></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="fechar('modal-email')">Cancelar</button>
-      <button class="btn btn-primary" id="btn-enviar-email" onclick="enviarEmail()">📧 Enviar</button>
+      <button class="btn btn-primary" id="btn-enviar-email" onclick="enviarEmail()">?? Enviar</button>
     </div>
   </div>
 </div>
@@ -379,26 +379,26 @@ tr:hover td { background: #fafaf8; }
   </div>
 </div>
 
-<!-- Modal: Novo usuário -->
+<!-- Modal: Novo usu�rio -->
 <div class="modal-overlay" id="modal-user">
   <div class="modal" style="width:380px">
-    <h3>Novo usuário</h3>
+    <h3>Novo usu�rio</h3>
     <div class="form-grid">
       <div class="form-group full"><label>Nome</label><input id="u-nome" placeholder="Nome completo"></div>
       <div class="form-group full"><label>E-mail</label><input id="u-email" type="email" placeholder="email@empresa.com"></div>
       <div class="form-group"><label>Senha</label><input id="u-senha" type="password" placeholder="Senha"></div>
       <div class="form-group"><label>Perfil</label>
-        <select id="u-perfil"><option value="usuario">Usuário</option><option value="admin">Administrador</option></select>
+        <select id="u-perfil"><option value="usuario">Usu�rio</option><option value="admin">Administrador</option></select>
       </div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="fechar('modal-user')">Cancelar</button>
-      <button class="btn btn-primary" onclick="salvarUser()">Criar usuário</button>
+      <button class="btn btn-primary" onclick="salvarUser()">Criar usu�rio</button>
     </div>
   </div>
 </div>
 
-<!-- Modal: Config busca automática -->
+<!-- Modal: Config busca autom�tica -->
 <div class="modal-overlay" id="modal-config">
   <div class="modal" style="width:380px">
     <h3>Nova regra de busca</h3>
@@ -424,7 +424,7 @@ let todosForns = [];
 let todasCats  = [];
 let perfilAtual = "";
 
-// ─── Auth ──────────────────────────────────────────────────────────────────────
+// --- Auth ----------------------------------------------------------------------
 async function fazerLogin() {
   const email = document.getElementById("login-email").value;
   const senha = document.getElementById("login-senha").value;
@@ -449,7 +449,7 @@ function iniciarApp(nome, perfil) {
   document.getElementById("login-page").style.display = "none";
   document.getElementById("app").style.display = "block";
   document.getElementById("sidebar-nome").textContent  = nome;
-  document.getElementById("sidebar-perfil").textContent = perfil === "admin" ? "Administrador" : "Usuário";
+  document.getElementById("sidebar-perfil").textContent = perfil === "admin" ? "Administrador" : "Usu�rio";
   if (perfil === "admin") {
     document.querySelectorAll(".admin-only").forEach(el => el.style.display = "flex");
     carregarConfigEmail();
@@ -464,7 +464,7 @@ async function verificarSessao() {
 }
 verificarSessao();
 
-// ─── Nav ────────────────────────────────────────────────────────────────────────
+// --- Nav ------------------------------------------------------------------------
 function navAuto(el) { document.querySelectorAll(".section").forEach(s => s.classList.remove("active")); document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active")); el.classList.add("active"); document.getElementById("sec-auto").style.cssText = "display:block!important"; carregarConfigs(); }
 function nav(el, sec) {
   document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
@@ -479,7 +479,7 @@ function nav(el, sec) {
   if (sec === "fornecedores")  { carregarForn(); carregarCatsFiltro(); }
 }
 
-// ─── Stats ──────────────────────────────────────────────────────────────────────
+// --- Stats ----------------------------------------------------------------------
 async function carregarStats() {
   const r = await fetch("/stats").then(r=>r.json()).catch(()=>null);
   if (!r) return;
@@ -494,7 +494,7 @@ async function carregarStats() {
   } else { nav.querySelector(".badge")?.remove(); }
 }
 
-// ─── Fornecedores ───────────────────────────────────────────────────────────────
+// --- Fornecedores ---------------------------------------------------------------
 async function carregarForn() {
   const r = await fetch("/fornecedores").then(r=>r.json());
   todosForns = r; renderForn(r);
@@ -532,27 +532,27 @@ function renderForn(lista) {
   tb.innerHTML = lista.map(f => {
     const sit = f.situacao_cnpj || '';
     const sitClass = sit === 'ATIVA' ? 'cnpj-ativa' : sit ? 'cnpj-inativa' : 'cnpj-sem';
-    const sitLabel = sit || '–';
-    const cnpjLabel = f.cnpj || '–';
-    const cidadeEstado = [f.cidade, f.estado].filter(Boolean).join(' / ') || '–';
+    const sitLabel = sit || '�';
+    const cnpjLabel = f.cnpj || '�';
+    const cidadeEstado = [f.cidade, f.estado].filter(Boolean).join(' / ') || '�';
     return `
     <tr>
       <td>
         <strong>${f.nome}</strong>
         ${f.endereco ? `<div style="font-size:11px;color:#aaa;margin-top:2px">${f.endereco}</div>` : ''}
       </td>
-      <td>${f.categoria_nome ? `<span class="cat-badge">${f.categoria_nome}</span>` : '<span style="color:#bbb">–</span>'}</td>
-      <td>${f.subcategoria_nome ? `<span class="subcat-badge">${f.subcategoria_nome}</span>` : '<span style="color:#bbb">–</span>'}</td>
+      <td>${f.categoria_nome ? `<span class="cat-badge">${f.categoria_nome}</span>` : '<span style="color:#bbb">�</span>'}</td>
+      <td>${f.subcategoria_nome ? `<span class="subcat-badge">${f.subcategoria_nome}</span>` : '<span style="color:#bbb">�</span>'}</td>
       <td style="font-size:12px;color:#666">${cnpjLabel}</td>
       <td><span class="${sitClass}">${sitLabel}</span></td>
-      <td>${f.whatsapp ? `<button class="btn btn-whatsapp btn-xs" onclick="abrirWhatsApp('${f.whatsapp}','${f.nome}')">WhatsApp</button>` : (f.email ? `<button class="btn btn-ghost btn-xs" onclick="abrirEmail('${f.email}','${f.nome}')">E-mail</button>` : (f.contato || '<span style="color:#bbb">–</span>'))}</td>
+      <td>${f.whatsapp ? `<button class="btn btn-whatsapp btn-xs" onclick="abrirWhatsApp('${f.whatsapp}','${f.nome}')">WhatsApp</button>` : (f.email ? `<button class="btn btn-ghost btn-xs" onclick="abrirEmail('${f.email}','${f.nome}')">E-mail</button>` : (f.contato || '<span style="color:#bbb">�</span>'))}</td>
       <td style="font-size:12px">${cidadeEstado}</td>
       <td>
         <div class="acoes">
           ${f.whatsapp ? `<button class="btn btn-whatsapp btn-xs" onclick="abrirWhatsApp('${f.whatsapp}','${f.nome}')">WhatsApp</button>` : ''}
           ${f.email    ? `<button class="btn btn-ghost btn-xs" onclick="abrirEmail('${f.email}','${f.nome}')">E-mail</button>` : ''}
-          <button class="btn btn-ghost btn-xs" onclick='editarForn(${JSON.stringify(f)})'>✏️</button>
-          <button class="btn btn-danger btn-xs" onclick="deletarForn(${f.id})">🗑</button>
+          <button class="btn btn-ghost btn-xs" onclick='editarForn(${JSON.stringify(f)})'>??</button>
+          <button class="btn btn-danger btn-xs" onclick="deletarForn(${f.id})">??</button>
         </div>
       </td>
     </tr>`;
@@ -623,7 +623,7 @@ async function salvarForn() {
     cnpj: document.getElementById("f-cnpj").value.trim(),
     site: document.getElementById("f-site").value.trim(),
   };
-  if (!dados.nome) { alert("Nome obrigatório!"); return; }
+  if (!dados.nome) { alert("Nome obrigat�rio!"); return; }
   const url = editandoId ? `/fornecedores/${editandoId}` : "/fornecedores";
   const method = editandoId ? "PUT" : "POST";
   await fetch(url, {method, headers:{"Content-Type":"application/json"}, body: JSON.stringify(dados)});
@@ -632,18 +632,18 @@ async function salvarForn() {
   carregarForn(); carregarStats();
 }
 
-// ─── WhatsApp ──────────────────────────────────────────────────────────────────
+// --- WhatsApp ------------------------------------------------------------------
 function abrirWhatsApp(numero, nome) {
   const num = numero.replace(/\D/g,"");
-  const msg = encodeURIComponent(`Olá ${nome}, tudo bem?`);
+  const msg = encodeURIComponent(`Ol� ${nome}, tudo bem?`);
   window.open(`https://wa.me/55${num}?text=${msg}`, "_blank");
 }
 
-// ─── E-mail ────────────────────────────────────────────────────────────────────
+// --- E-mail --------------------------------------------------------------------
 function abrirEmail(email, nome) {
   document.getElementById("email-para").value    = email;
   document.getElementById("email-assunto").value = `Contato - ${nome}`;
-  document.getElementById("email-corpo").value   = `Olá ${nome},\n\n`;
+  document.getElementById("email-corpo").value   = `Ol� ${nome},\n\n`;
   document.getElementById("email-status").style.display = "none";
   document.getElementById("modal-email").classList.add("open");
 }
@@ -661,38 +661,38 @@ async function enviarEmail() {
   status.style.display = "block";
   if (r.ok) {
     status.style.cssText = "display:block;color:#27500a;background:#eaf3de;padding:10px;border-radius:7px;font-size:13px;margin-bottom:10px";
-    status.textContent = "✅ " + d.mensagem;
+    status.textContent = "? " + d.mensagem;
     setTimeout(() => fechar("modal-email"), 1500);
   } else {
     status.style.cssText = "display:block;color:#791f1f;background:#fcebeb;padding:10px;border-radius:7px;font-size:13px;margin-bottom:10px";
-    status.textContent = "❌ " + d.erro;
+    status.textContent = "? " + d.erro;
   }
-  btn.textContent = "📧 Enviar"; btn.disabled = false;
+  btn.textContent = "?? Enviar"; btn.disabled = false;
 }
 
-// ─── Fila ───────────────────────────────────────────────────────────────────────
+// --- Fila -----------------------------------------------------------------------
 async function carregarFila() {
   const fila = await fetch("/fila").then(r=>r.json());
   const el = document.getElementById("lista-fila");
-  if (!fila.length) { el.innerHTML = '<p style="color:#aaa;font-size:13px">Nenhum item aguardando aprovação.</p>'; return; }
+  if (!fila.length) { el.innerHTML = '<p style="color:#aaa;font-size:13px">Nenhum item aguardando aprova��o.</p>'; return; }
   el.innerHTML = fila.map(f => `
     <div class="fila-card" id="fila-${f.id}">
       <div class="info">
         <strong>${f.nome}</strong>
         <div class="meta">
           ${f.categoria ? `<span class="cat-badge">${f.categoria}</span>` : ""}
-          ${f.cidade    ? ` · ${f.cidade}` : ""}${f.estado ? ` (${f.estado})` : ""}
-          ${f.cnpj      ? ` · CNPJ: ${f.cnpj}` : ""}
-          ${f.situacao_cnpj ? ` · <span style="color:${f.situacao_cnpj==='ATIVA'?'#27a96a':'#e24b4a'};font-weight:500">${f.situacao_cnpj}</span>` : ""}
-          ${f.contato ? ` · ${f.contato}` : ""}
-          ${f.email ? ` · <button class="btn btn-ghost btn-xs" onclick="abrirEmail('${f.email}','${f.nome}')">E-mail</button>` : ""}
-          ${f.whatsapp ? ` · <button class="btn btn-whatsapp btn-xs" onclick="abrirWhatsApp('${f.whatsapp}','${f.nome}')">WhatsApp</button>` : ""}
-          ${f.site      ? ` · <a href="${f.site}" target="_blank" style="color:#4f8ef7">${f.site}</a>` : ""}
+          ${f.cidade    ? ` � ${f.cidade}` : ""}${f.estado ? ` (${f.estado})` : ""}
+          ${f.cnpj      ? ` � CNPJ: ${f.cnpj}` : ""}
+          ${f.situacao_cnpj ? ` � <span style="color:${f.situacao_cnpj==='ATIVA'?'#27a96a':'#e24b4a'};font-weight:500">${f.situacao_cnpj}</span>` : ""}
+          ${f.contato ? ` � ${f.contato}` : ""}
+          ${f.email ? ` � <button class="btn btn-ghost btn-xs" onclick="abrirEmail('${f.email}','${f.nome}')">E-mail</button>` : ""}
+          ${f.whatsapp ? ` � <button class="btn btn-whatsapp btn-xs" onclick="abrirWhatsApp('${f.whatsapp}','${f.nome}')">WhatsApp</button>` : ""}
+          ${f.site      ? ` � <a href="${f.site}" target="_blank" style="color:#4f8ef7">${f.site}</a>` : ""}
         </div>
       </div>
       <div class="actions">
-        <button class="btn btn-success btn-sm" onclick="aprovarFila(${f.id})">✅ Aprovar</button>
-        <button class="btn btn-danger  btn-sm" onclick="rejeitarFila(${f.id})">✕ Rejeitar</button>
+        <button class="btn btn-success btn-sm" onclick="aprovarFila(${f.id})">? Aprovar</button>
+        <button class="btn btn-danger  btn-sm" onclick="rejeitarFila(${f.id})">? Rejeitar</button>
       </div>
     </div>`).join("");
 }
@@ -712,7 +712,7 @@ async function aprovarTodos() {
   toast(r.mensagem); carregarFila(); carregarStats(); carregarForn();
 }
 
-// ─── Histórico ──────────────────────────────────────────────────────────────────
+// --- Hist�rico ------------------------------------------------------------------
 async function carregarHistorico() {
   const hist = await fetch("/historico").then(r=>r.json());
   const el = document.getElementById("lista-historico");
@@ -728,7 +728,7 @@ async function carregarHistorico() {
     </div>`).join("");
 }
 
-// ─── Categorias ─────────────────────────────────────────────────────────────────
+// --- Categorias -----------------------------------------------------------------
 async function carregarCats() {
   todasCats = await fetch("/categorias").then(r=>r.json());
   const el = document.getElementById("cat-tree");
@@ -742,7 +742,7 @@ async function carregarCats() {
       <div class="sub-list">
         ${c.subcategorias.map(s => `
           <div class="sub-item">${s.nome}
-            <button onclick="deletarSub(${s.id},${c.id})" title="Remover">✕</button>
+            <button onclick="deletarSub(${s.id},${c.id})" title="Remover">?</button>
           </div>`).join("")}
       </div>
       <div class="add-sub">
@@ -780,7 +780,7 @@ async function deletarSub(id) {
   toast("Removida!"); carregarCats(); carregarCatsFiltro();
 }
 
-// ─── Usuários ────────────────────────────────────────────────────────────────────
+// --- Usu�rios --------------------------------------------------------------------
 async function carregarUsuarios() {
   const lista = await fetch("/usuarios").then(r=>r.json());
   const el = document.getElementById("lista-usuarios");
@@ -789,7 +789,7 @@ async function carregarUsuarios() {
       <div class="user-avatar">${u.nome.slice(0,2).toUpperCase()}</div>
       <div class="info">
         <strong>${u.nome}</strong>
-        <span>${u.email} · <span class="perfil-badge perfil-${u.perfil}">${u.perfil}</span></span>
+        <span>${u.email} � <span class="perfil-badge perfil-${u.perfil}">${u.perfil}</span></span>
       </div>
       <button class="btn btn-danger btn-sm" onclick="deletarUser(${u.id})">Desativar</button>
     </div>`).join("");
@@ -806,16 +806,16 @@ async function salvarUser() {
   const r = await fetch("/usuarios", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(d)});
   const resp = await r.json();
   if (!r.ok) { alert(resp.erro); return; }
-  fechar("modal-user"); toast("Usuário criado!"); carregarUsuarios();
+  fechar("modal-user"); toast("Usu�rio criado!"); carregarUsuarios();
 }
 
 async function deletarUser(id) {
-  if (!confirm("Desativar este usuário?")) return;
+  if (!confirm("Desativar este usu�rio?")) return;
   await fetch(`/usuarios/${id}`, {method:"DELETE"});
-  toast("Usuário desativado!"); carregarUsuarios();
+  toast("Usu�rio desativado!"); carregarUsuarios();
 }
 
-// ─── Config e-mail ───────────────────────────────────────────────────────────────
+// --- Config e-mail ---------------------------------------------------------------
 async function carregarConfigEmail() {
   const cfg = await fetch("/email/config").then(r=>r.json());
   if (cfg.host)      document.getElementById("cfg-host").value      = cfg.host;
@@ -827,37 +827,37 @@ async function carregarConfigEmail() {
 async function salvarConfigEmail() {
   const d = { host: document.getElementById("cfg-host").value.trim(), porta: parseInt(document.getElementById("cfg-porta").value), usuario: document.getElementById("cfg-usuario").value.trim(), senha: document.getElementById("cfg-senha").value, remetente: document.getElementById("cfg-remetente").value.trim() };
   await fetch("/email/config", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(d)});
-  toast("Configuração salva!");
+  toast("Configura��o salva!");
 }
 
-// ─── Busca manual ────────────────────────────────────────────────────────────────
+// --- Busca manual ----------------------------------------------------------------
 async function executarBusca() {
   const cat    = document.getElementById("busca-cat").value.trim();
   const cidade = document.getElementById("busca-cidade").value.trim();
   const resEl  = document.getElementById("busca-resultado");
   const btn    = document.getElementById("btn-buscar");
   if (!cat) { alert("Informe a categoria!"); return; }
-  btn.textContent = "⏳ Buscando..."; btn.disabled = true; resEl.style.display = "none";
+  btn.textContent = "? Buscando..."; btn.disabled = true; resEl.style.display = "none";
   try {
     const r = await fetch("/buscar", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({categoria: cat, cidade, nome: document.getElementById("busca-nome").value.trim()})}).then(r=>r.json());
     resEl.className = "busca-resultado success";
-    resEl.textContent = `✅ Encontrados ${r.encontrados} resultados — ${r.novos_na_fila} novos adicionados à fila.`;
+    resEl.textContent = `? Encontrados ${r.encontrados} resultados � ${r.novos_na_fila} novos adicionados � fila.`;
     resEl.style.display = "block"; carregarStats();
   } catch { resEl.className = "busca-resultado error"; resEl.textContent = "Erro ao buscar."; resEl.style.display = "block"; }
-  btn.textContent = "🔍 Buscar"; btn.disabled = false;
+  btn.textContent = "?? Buscar"; btn.disabled = false;
 }
 
-// ─── Busca automática ────────────────────────────────────────────────────────────
+// --- Busca autom�tica ------------------------------------------------------------
 async function carregarConfigs() {
   const configs = await fetch("/config-busca").then(r=>r.json());
   const el = document.getElementById("lista-config");
   if (!configs.length) { el.innerHTML = '<p style="color:#aaa;font-size:13px">Nenhuma regra configurada.</p>'; return; }
   el.innerHTML = configs.map(c => `
     <div class="fila-card">
-      <div style="font-size:20px">🔁</div>
+      <div style="font-size:20px">??</div>
       <div class="info">
         <strong>${c.categoria}</strong>
-        <div class="meta">${c.cidade||"Brasil"} · a cada ${c.intervalo_horas}h${c.ultima_busca ? ` · última: ${c.ultima_busca.slice(0,16)}` : ""}</div>
+        <div class="meta">${c.cidade||"Brasil"} � a cada ${c.intervalo_horas}h${c.ultima_busca ? ` � �ltima: ${c.ultima_busca.slice(0,16)}` : ""}</div>
       </div>
       <button class="btn btn-danger btn-sm" onclick="deletarConfig(${c.id})">Remover</button>
     </div>`).join("");
@@ -878,7 +878,7 @@ async function deletarConfig(id) {
   toast("Removida!"); carregarConfigs();
 }
 
-// ─── Utilitários ─────────────────────────────────────────────────────────────────
+// --- Utilit�rios -----------------------------------------------------------------
 function fechar(id) { document.getElementById(id).classList.remove("open"); }
 
 function toast(msg, tipo="") {
