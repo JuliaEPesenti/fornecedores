@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory, session
+﻿from flask import Flask, request, jsonify, send_from_directory, session
 import psycopg2, psycopg2.extras, requests, re, smtplib, hashlib, os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -9,6 +9,8 @@ from functools import wraps
 
 app = Flask(__name__, static_folder="static")
 app.secret_key = "fornecedores_secret_2024"
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
 DB = "fornecedores.db"
 
 # ─── Banco ────────────────────────────────────────────────────────────────────
@@ -543,4 +545,5 @@ if __name__ == "__main__":
         app.run(debug=False, use_reloader=False, port=5000)
     except (KeyboardInterrupt, SystemExit):
         scheduler.shutdown()
+
 
