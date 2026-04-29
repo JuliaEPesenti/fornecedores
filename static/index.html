@@ -267,7 +267,7 @@ tr:hover td { background: #fafaf8; }
       <div class="section-title" style="margin-bottom:18px">Buscar novos fornecedores na web</div>
       <div class="busca-box">
         <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
-          <div class="form-group" style="flex:1;min-width:140px"><label>Categoria / Especificidade</label><input id="busca-cat" placeholder="Ex: Queijo, Computador..."></div>
+          <div class="form-group" style="flex:1;min-width:140px"><label>Categoria / Especificidade</label><input id="busca-cat" placeholder="Ex: Queijo, Computador..."><div class="form-group" style="flex:1;min-width:140px"><label>Nome (opcional)</label><input id="busca-nome" placeholder="Ex: Sadia, BRF..."></div>
           <div class="form-group" style="flex:1;min-width:140px"><label>Cidade (opcional)</label><input id="busca-cidade" placeholder="Ex: São Paulo"></div>
           <button class="btn btn-primary" id="btn-buscar" onclick="executarBusca()">🔍 Buscar</button>
         </div>
@@ -544,7 +544,7 @@ function renderForn(lista) {
       <td>${f.subcategoria_nome ? `<span class="subcat-badge">${f.subcategoria_nome}</span>` : '<span style="color:#bbb">–</span>'}</td>
       <td style="font-size:12px;color:#666">${cnpjLabel}</td>
       <td><span class="${sitClass}">${sitLabel}</span></td>
-      <td>${f.contato || '<span style="color:#bbb">–</span>'}</td>
+      <td>${f.whatsapp ? `<button class="btn btn-whatsapp btn-xs" onclick="abrirWhatsApp('${f.whatsapp}','${f.nome}')">WhatsApp</button>` : (f.email ? `<button class="btn btn-ghost btn-xs" onclick="abrirEmail('${f.email}','${f.nome}')">E-mail</button>` : (f.contato || '<span style="color:#bbb">–</span>'))}</td>
       <td style="font-size:12px">${cidadeEstado}</td>
       <td>
         <div class="acoes">
@@ -836,7 +836,7 @@ async function executarBusca() {
   if (!cat) { alert("Informe a categoria!"); return; }
   btn.textContent = "⏳ Buscando..."; btn.disabled = true; resEl.style.display = "none";
   try {
-    const r = await fetch("/buscar", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({categoria: cat, cidade})}).then(r=>r.json());
+    const r = await fetch("/buscar", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({categoria: cat, cidade, nome: document.getElementById("busca-nome").value.trim()})}).then(r=>r.json());
     resEl.className = "busca-resultado success";
     resEl.textContent = `✅ Encontrados ${r.encontrados} resultados — ${r.novos_na_fila} novos adicionados à fila.`;
     resEl.style.display = "block"; carregarStats();
@@ -887,6 +887,8 @@ function toast(msg, tipo="") {
 </script>
 </body>
 </html>
+
+
 
 
 
